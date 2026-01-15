@@ -1,2 +1,2 @@
 # chat-app
- Chat Application Built for Advancec Database Systems subject
+ Chat Application Built for Advanced Database Systems subject
