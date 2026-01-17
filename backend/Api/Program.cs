@@ -16,6 +16,8 @@ builder.Services.AddRedisConnectionMultiplexer();
 builder.Services.AddRedisContext();
 builder.Services.AddHostedService<IndexCreationService>();
 
+builder.Services.AddRepositories();
+builder.Services.AddBusinessLogicServices();
 
 var app = builder.Build();
 
@@ -32,4 +34,3 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.Run();
-
