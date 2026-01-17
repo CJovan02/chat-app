@@ -1,4 +1,6 @@
+using backend.Entities;
 using Redis.OM;
+using Redis.OM.Searching;
 using StackExchange.Redis;
 
 namespace backend.Database;
@@ -11,19 +13,17 @@ namespace backend.Database;
 /// <param name="connection"></param>
 public sealed class RedisContext(IConnectionMultiplexer connection)
 {
-    /// <summary>
-    /// Use this if you want to execute Redis commands.
-    /// </summary>
-    public readonly IDatabase Db = connection.GetDatabase();
+    // This is used for executing Redis commands
+    private readonly IDatabase _db = connection.GetDatabase();
 
-    // This is used for ORM.
-    public readonly RedisConnectionProvider Provider = new RedisConnectionProvider(connection);
+    // This is used for ORM
+    private readonly RedisConnectionProvider _provider = new RedisConnectionProvider(connection);
 
     public async Task PingAsync()
     {
         try
         {
-            var latency = await Db.PingAsync();
+            var latency = await _db.PingAsync();
             Console.WriteLine("✅ Pinged your deployment. You successfully connected to Redis! Latency: " +
                               latency.TotalMilliseconds + "ms");
         }
@@ -33,4 +33,11 @@ public sealed class RedisContext(IConnectionMultiplexer connection)
             Console.WriteLine(e);
         }
     }
+
+    public Task<bool> CreateIndexAsync(Type type)
+    {
+        return _provider.Connection.CreateIndexAsync(type);
+    }
+
+    public RedisCollection<User> Users => (RedisCollection<User>)_provider.RedisCollection<User>();
 }

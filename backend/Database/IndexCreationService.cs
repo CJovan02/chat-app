@@ -1,6 +1,5 @@
 using backend.Database;
 using backend.Entities;
-using Redis.OM;
 
 namespace backend.Infrastructure.HostedServices;
 
@@ -13,7 +12,7 @@ public class IndexCreationService(RedisContext redisContext) : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Creating redis indexes for entities...");
-        await redisContext.Provider.Connection.CreateIndexAsync(typeof(User));
+        await redisContext.CreateIndexAsync(typeof(User));
         Console.WriteLine("Redis index creation finished");
     }
 
