@@ -1,13 +1,14 @@
-using backend.Entities;
+using backend.Dto.Users.Request;
+using backend.Dto.Users.Response;
 
 namespace backend.Services.UserService;
 
 public interface IUserService
 {
-    Task<IEnumerable<User>> GetAllUsersAsync();
-    Task<User?> GetUserByIdAsync(string userId);
-    Task<User?> GetUserByUsernameAsync(string username);
-    Task CreateUserAsync(User user);
-    Task UpdateUserAsync(User user);
-    Task DeleteUserAsync(User user);
+    Task<IEnumerable<UserResponse>> GetAllUsersAsync();
+    Task<UserResponse?> GetUserByIdAsync(string userId);
+    Task<UserResponse?> GetUserByUsernameAsync(string username);
+    Task<string> CreateUserAsync(UserRequest request);
+    Task UpdateUserAsync(UserRequest request);
+    Task DeleteUserAsync(string userId);
 }

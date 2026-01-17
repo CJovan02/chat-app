@@ -1,4 +1,6 @@
-using backend.Entities;
+using backend.Dto.Users;
+using backend.Dto.Users.Request;
+using backend.Dto.Users.Response;
 using backend.Repositories.UserRepository;
 
 namespace backend.Services.UserService;
@@ -7,33 +9,50 @@ public class UserService(IUserRepository userRepository) : IUserService
 {
     private readonly IUserRepository _userRepository = userRepository;
 
-    public Task<IEnumerable<User>> GetAllUsersAsync()
+    public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
     {
-        return _userRepository.GetAllUsersAsync();
+        var users = await _userRepository.GetAllUsersAsync();
+        return users.Select(UserResponse.FromDomain);
     }
 
-    public Task<User?> GetUserByIdAsync(string userId)
+    public async Task<UserResponse?> GetUserByIdAsync(string userId)
     {
-        return _userRepository.GetUserByIdAsync(userId);
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user == null) return null;
+
+        return UserResponse.FromDomain(user);
     }
 
-    public Task<User?> GetUserByUsernameAsync(string username)
+    public async Task<UserResponse?> GetUserByUsernameAsync(string username)
     {
-        return _userRepository.GetUserByUsernameAsync(username);
+        var user = await _userRepository.GetUserByUsernameAsync(username);
+        if (user == null) return null;
+
+        return UserResponse.FromDomain(user);
     }
 
-    public Task CreateUserAsync(User user)
+    public async Task<string> CreateUserAsync(UserRequest request)
     {
-        return _userRepository.CreateUserAsync(user);
+        if (await _userRepository.UserExistsAsync(request.Username))
+            throw new Exception("User with provided username already exists");
+
+        return await _userRepository.CreateUserAsync(request.ToDomain());
     }
 
-    public Task UpdateUserAsync(User user)
+    public Task UpdateUserAsync(UserRequest request)
     {
-        return _userRepository.UpdateUserAsync(user);
+        return _userRepository.UpdateUserAsync(request.ToDomain());
     }
 
-    public Task DeleteUserAsync(User user)
+    public async Task DeleteUserAsync(string userId)
     {
-        return _userRepository.DeleteUserAsync(user);
+        // Redis ORM package accepts full object in order to delete it, that's why we need to pull it first
+        // This logic can also go inside repository, but I think it's fine like this
+
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user == null)
+            throw new Exception("User not found");
+
+        await _userRepository.DeleteUserAsync(user);
     }
 }

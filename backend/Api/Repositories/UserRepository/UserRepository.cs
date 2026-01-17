@@ -9,6 +9,11 @@ public class UserRepository(RedisContext redisContext) : IUserRepository
 {
     private readonly RedisCollection<User> _users = redisContext.Users;
 
+    public Task<bool> UserExistsAsync(string username)
+    {
+        return _users.AnyAsync(u => u.Username == username);
+    }
+
     public async Task<IEnumerable<User>> GetAllUsersAsync()
     {
         return await _users.ToListAsync();
@@ -24,7 +29,7 @@ public class UserRepository(RedisContext redisContext) : IUserRepository
         return _users.Where(u => u.Username == username).FirstOrDefaultAsync();
     }
 
-    public Task CreateUserAsync(User user)
+    public Task<string> CreateUserAsync(User user)
     {
         return _users.InsertAsync(user);
     }
