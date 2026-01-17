@@ -1,4 +1,5 @@
 using backend.Database;
+using backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ DotNetEnv.Env.Load();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddEnvVariables();
 builder.Services.AddRedisDatabase();
 
 var app = builder.Build();

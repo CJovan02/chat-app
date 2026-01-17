@@ -1,5 +1,5 @@
+using backend.Infrastructure.EnvironmentConfig;
 using DotNetEnv;
-using Microsoft.VisualBasic;
 using StackExchange.Redis;
 
 namespace backend.Database;
@@ -14,22 +14,13 @@ public static class ServiceCollectionExtension
     {
         services.AddSingleton<IConnectionMultiplexer>(provider =>
         {
-            var host = DotNetEnv.Env.GetString(Common.Constants.EnvVariables.RedisCloudHost);
-            if (host == null)
-                throw new Common.Exceptions.EnvVariableNotFoundException(Common.Constants.EnvVariables.RedisCloudHost);
+            var envConfig = provider.GetService<IEnvConfig>();
 
-            var port = DotNetEnv.Env.GetInt(Common.Constants.EnvVariables.RedisCloudPort);
-            if (port == null)
-                throw new Common.Exceptions.EnvVariableNotFoundException(Common.Constants.EnvVariables.RedisCloudPort);
-
-            var pass = DotNetEnv.Env.GetString(Common.Constants.EnvVariables.RedisPassword);
-            if (pass == null)
-                throw new Common.Exceptions.EnvVariableNotFoundException(Common.Constants.EnvVariables.RedisPassword);
             var config = new ConfigurationOptions
             {
-                EndPoints= { { host, port} },
+                EndPoints = { { envConfig.RedisCloudHost, envConfig.RedisCloudPort } },
                 User = "default",
-                Password = pass
+                Password = envConfig.RedisPassword
             };
 
             return ConnectionMultiplexer.Connect(config);
