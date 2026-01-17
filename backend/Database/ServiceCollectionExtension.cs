@@ -1,5 +1,4 @@
 using backend.Infrastructure.EnvironmentConfig;
-using DotNetEnv;
 using StackExchange.Redis;
 
 namespace backend.Database;
@@ -7,10 +6,11 @@ namespace backend.Database;
 public static class ServiceCollectionExtension
 {
     /// <summary>
-    /// Creates redis database configuration to DI and also creates redis database to DI which uses that configuration
+    /// Creates Redis connection configuration and uses it to create connection multiplexer.
+    /// This multiplexer is connection to redis service.
+    /// Depends on IEnvConfig.
     /// </summary>
-    /// <exception cref="EnvVariableNotFoundException"></exception>
-    public static IServiceCollection AddRedisDatabase(this IServiceCollection services)
+    public static IServiceCollection AddRedisConnectionMultiplexer(this IServiceCollection services)
     {
         services.AddSingleton<IConnectionMultiplexer>(provider =>
         {
@@ -26,8 +26,15 @@ public static class ServiceCollectionExtension
             return ConnectionMultiplexer.Connect(config);
         });
 
-        services.AddSingleton<RedisDatabase>();
-
         return services;
+    }
+
+    /// <summary>
+    /// Creates Redis Context object and adds it to DI.
+    /// It depends on IConnectionMultiplexer for redis connection.
+    /// </summary>
+    public static IServiceCollection AddRedisContext(this IServiceCollection services)
+    {
+        return services.AddSingleton<RedisContext>();
     }
 }

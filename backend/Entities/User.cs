@@ -1,7 +1,13 @@
+using Redis.OM.Modeling;
+
 namespace backend.Entities;
 
-public class User
+[Document(StorageType = StorageType.Json, Prefixes = ["User"])]
+public class User : BaseEntity
 {
-    public required string Username { get; set; }
-    public required string DisplayName { get; set; }
+    [Indexed] public required string Username { get; set; }
+
+    [Indexed] public required string DisplayName { get; set; }
+
+    [Indexed] public required int Age { get; set; }
 }

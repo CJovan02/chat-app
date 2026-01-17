@@ -1,6 +1,8 @@
+using Redis.OM.Modeling;
+
 namespace backend.Entities;
 
 public abstract class BaseEntity
 {
-    public string Id { get; init; }
+    [RedisIdField] [Indexed] public string Id { get; init; }
 }
