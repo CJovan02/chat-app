@@ -22,9 +22,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dto\Rooms\Request\" />
-    <Folder Include="Dto\Rooms\Response\" />
-  </ItemGroup>
-
 </Project>

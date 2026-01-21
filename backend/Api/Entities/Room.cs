@@ -6,5 +6,5 @@ namespace backend.Entities;
 public class Room : BaseEntity
 {
     [Indexed] public required List<string> ParticipantIds { get; set; }
-    [Indexed] public DateTimeOffset CreatedAt { get; set; }
+    [Indexed] public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 }
