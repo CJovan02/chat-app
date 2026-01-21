@@ -1,5 +1,4 @@
 using backend.Dto.Users.Request;
-using backend.Entities;
 using backend.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +19,13 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] UserRequest request)
     {
-        var id = await _userService.CreateUserAsync(request);
-        return Ok(id);
+        return Ok(await _userService.CreateUserAsync(request));
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete(string roomId)
+    {
+        await _userService.DeleteUserAsync(roomId);
+        return Ok();
     }
 }
