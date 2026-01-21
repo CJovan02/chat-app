@@ -39,7 +39,6 @@ public class UserRepository(RedisContext redisContext) : IUserRepository
         return _users.UpdateAsync(user);
     }
 
-    // TODO: refactor to only requiring ID instead of full object
     public Task DeleteUserAsync(User user)
     {
         return _users.DeleteAsync(user);

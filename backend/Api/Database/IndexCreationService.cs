@@ -13,6 +13,7 @@ public class IndexCreationService(RedisContext redisContext) : IHostedService
     {
         Console.WriteLine("Creating redis indexes for entities...");
         await redisContext.CreateIndexAsync(typeof(User));
+        await redisContext.CreateIndexAsync(typeof(Room));
         Console.WriteLine("Redis index creation finished");
     }
 

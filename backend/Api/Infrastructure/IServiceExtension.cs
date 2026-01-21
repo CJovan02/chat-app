@@ -1,4 +1,5 @@
 using backend.Infrastructure.EnvironmentConfig;
+using backend.Repositories.RoomRepository;
 using backend.Repositories.UserRepository;
 using backend.Services.UserService;
 
@@ -13,7 +14,9 @@ public static class IServiceExtension
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
-        return services.AddScoped<IUserRepository, UserRepository>();
+        return services
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IRoomRepository, RoomRepository>();
     }
 
     public static IServiceCollection AddBusinessLogicServices(this IServiceCollection services)

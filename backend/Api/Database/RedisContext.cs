@@ -40,4 +40,6 @@ public sealed class RedisContext(IConnectionMultiplexer connection)
     }
 
     public RedisCollection<User> Users => (RedisCollection<User>)_provider.RedisCollection<User>();
+
+    public RedisCollection<Room> Rooms => (RedisCollection<Room>)_provider.RedisCollection<Room>();
 }
