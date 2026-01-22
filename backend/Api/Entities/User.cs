@@ -2,7 +2,7 @@ using Redis.OM.Modeling;
 
 namespace backend.Entities;
 
-[Document(StorageType = StorageType.Json, Prefixes = ["User"])]
+[Document(StorageType = StorageType.Json, Prefixes = ["user"])]
 public class User : BaseEntity
 {
     [Indexed(CaseSensitive = true)] public required string Username { get; set; }

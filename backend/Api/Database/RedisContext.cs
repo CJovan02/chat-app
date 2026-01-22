@@ -39,6 +39,23 @@ public sealed class RedisContext(IConnectionMultiplexer connection)
         return _provider.Connection.CreateIndexAsync(type);
     }
 
+    // Redis Set Operations
+    public Task<bool> SetAddAsync(RedisKey key, RedisValue value)
+    {
+        return _db.SetAddAsync(key, value);
+    }
+
+    public Task<bool> SetRemoveAsync(RedisKey key, RedisValue value)
+    {
+        return _db.SetRemoveAsync(key, value);
+    }
+
+    public Task<RedisValue[]> SetMembersAsync(RedisKey key)
+    {
+        return _db.SetMembersAsync(key);
+    }
+
+
     public RedisCollection<User> Users => (RedisCollection<User>)_provider.RedisCollection<User>();
 
     public RedisCollection<Room> Rooms => (RedisCollection<Room>)_provider.RedisCollection<Room>();

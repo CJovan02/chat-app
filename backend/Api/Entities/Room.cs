@@ -2,7 +2,7 @@ using Redis.OM.Modeling;
 
 namespace backend.Entities;
 
-[Document(StorageType = StorageType.Json, Prefixes = ["Room"])]
+[Document(StorageType = StorageType.Json, Prefixes = ["room"])]
 public class Room : BaseEntity
 {
     [Indexed] public required List<string> ParticipantIds { get; set; }

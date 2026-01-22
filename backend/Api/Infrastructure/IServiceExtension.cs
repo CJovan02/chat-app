@@ -1,6 +1,7 @@
 using backend.Infrastructure.EnvironmentConfig;
 using backend.Repositories.RoomRepository;
 using backend.Repositories.UserRepository;
+using backend.Repositories.UserRoomRepository;
 using backend.Services.RoomService;
 using backend.Services.UserService;
 
@@ -16,6 +17,7 @@ public static class IServiceExtension
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         return services
+            .AddScoped<IUserRoomsRepository, UserRoomsRepository>()
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IRoomRepository, RoomRepository>();
     }
