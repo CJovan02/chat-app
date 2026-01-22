@@ -2,12 +2,14 @@ using backend.Dto.Users;
 using backend.Dto.Users.Request;
 using backend.Dto.Users.Response;
 using backend.Repositories.UserRepository;
+using backend.Repositories.UserRoomRepository;
 
 namespace backend.Services.UserService;
 
-public class UserService(IUserRepository userRepository) : IUserService
+public class UserService(IUserRepository userRepository, IUserRoomsRepository roomsRepository) : IUserService
 {
     private readonly IUserRepository _userRepository = userRepository;
+    private readonly IUserRoomsRepository _roomsRepository = roomsRepository;
 
     public async Task<IEnumerable<UserResponse>> GetAllUsersAsync()
     {
@@ -15,20 +17,24 @@ public class UserService(IUserRepository userRepository) : IUserService
         return users.Select(UserResponse.FromDomain);
     }
 
-    public async Task<UserResponse?> GetUserByIdAsync(string userId)
+    public async Task<UserResponseWithRooms?> GetUserByIdAsync(string userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
         if (user == null) return null;
 
-        return UserResponse.FromDomain(user);
+        var roomIds = (await _roomsRepository.GetUserRoomsAsync(user.Id));
+
+        return UserResponseWithRooms.FromDomain(user, roomIds);
     }
 
-    public async Task<UserResponse?> GetUserByUsernameAsync(string username)
+    public async Task<UserResponseWithRooms?> GetUserByUsernameAsync(string username)
     {
         var user = await _userRepository.GetUserByUsernameAsync(username);
         if (user == null) return null;
 
-        return UserResponse.FromDomain(user);
+        var roomIds = (await _roomsRepository.GetUserRoomsAsync(user.Id));
+
+        return UserResponseWithRooms.FromDomain(user, roomIds);
     }
 
     public async Task<string> CreateUserAsync(UserRequest request)
