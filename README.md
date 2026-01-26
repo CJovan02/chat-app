@@ -7,7 +7,7 @@ Chat Application Built for Advanced Database Systems subject
 classDiagram
     class User {
         <<JSON>>
-        string Id -> "User:id"
+        string Id -> "user:id"
         string Username
         string DisplayName
         int Age
@@ -15,20 +15,20 @@ classDiagram
 
     class UserRooms {
         <<SET>>
-        "User:UserId:rooms"
+        "user:userId:rooms"
         string RoomId
     }
 
     class Room {
         <<JSON>>
-        string Id -> "Room:id"
+        string Id -> "room:id"
         List~string~ ParticipantIds
         Timestamp CreatedAt
     }
 
     class Message {
         <<STREAM>>
-        string Id -> "Room:RoomId:Messages:Id"
+        string Id -> "room:roomId:messages:Id"
         string Text
         string SenderId
         Timestamp SentAt
@@ -36,7 +36,7 @@ classDiagram
 
     class LastMessages {
         <<LIST>>
-        int Index -> "Room:RoomId:lastMessages"
+        int Index -> "room:roomId:lastMessages"
         string MessagePayload [JSON]
     }
 
