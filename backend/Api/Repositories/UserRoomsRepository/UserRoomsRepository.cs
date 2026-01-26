@@ -9,6 +9,15 @@ public class UserRoomsRepository(RedisContext redisContext) : IUserRoomsReposito
     private static string Key(string userId)
         => $"user:{userId}:rooms";
 
+    private static string RoomKey(string roomId)
+        => $"room:{roomId}";
+
+    public Task<bool> IsUserInRoom(string userId, string roomId)
+    {
+        return _redisContext.SetContainsAsync(Key(userId), RoomKey(roomId));
+    }
+
+
     /// <summary>
     /// Adds a room to user's room set.
     /// SADD user:{userId}:rooms roomId
