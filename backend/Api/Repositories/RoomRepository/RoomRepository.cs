@@ -8,6 +8,11 @@ public class RoomRepository(RedisContext redisContext) : IRoomRepository
 {
     private readonly RedisCollection<Room> _rooms = redisContext.Rooms;
 
+    public Task<bool> RoomExists(string roomId)
+    {
+        return _rooms.AnyAsync(r => r.Id == roomId);
+    }
+
     public async Task<IEnumerable<Room>> GetAllRoomsAsync()
     {
         return await _rooms.ToListAsync();

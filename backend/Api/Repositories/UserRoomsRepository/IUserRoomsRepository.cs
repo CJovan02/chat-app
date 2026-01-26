@@ -5,6 +5,7 @@ namespace backend.Repositories.UserRoomRepository;
 /// </summary>
 public interface IUserRoomsRepository
 {
+    Task<bool> IsUserInRoom(string userId, string roomId);
     Task AddRoomToUserAsync(string userId, string roomId);
     Task RemoveRoomFromUserAsync(string userId, string roomId);
     Task<IReadOnlyCollection<string>> GetUserRoomsAsync(string userId);

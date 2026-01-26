@@ -4,6 +4,7 @@ namespace backend.Repositories.RoomRepository;
 
 public interface IRoomRepository
 {
+    Task<bool> RoomExists(string roomId);
     Task<IEnumerable<Room>> GetAllRoomsAsync();
     Task<Room?> GetRoomByIdAsync(string roomId);
     Task<string> CreateRoomAsync(Room room);
