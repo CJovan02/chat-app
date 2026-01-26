@@ -72,6 +72,17 @@ public sealed class RedisContext(IConnectionMultiplexer connection)
         return _db.StreamAddAsync(key, streamPairs);
     }
 
+    public Task<StreamEntry[]> StreamRangeAsync(
+        RedisKey key,
+        RedisValue? minId = null,
+        RedisValue? maxId = null,
+        int? count = null,
+        Order messageOrder = Order.Ascending,
+        CommandFlags flags = CommandFlags.None)
+    {
+        return _db.StreamRangeAsync(key, minId, maxId, count, messageOrder, flags);
+    }
+
 
     public RedisCollection<User> Users => (RedisCollection<User>)_provider.RedisCollection<User>();
 

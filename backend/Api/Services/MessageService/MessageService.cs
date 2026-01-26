@@ -1,5 +1,6 @@
 using backend.Dto.Messages;
 using backend.Dto.Messages.Request;
+using backend.Dto.Messages.Response;
 using backend.Repositories.MessageRepository;
 using backend.Repositories.RoomRepository;
 using backend.Repositories.UserRepository;
@@ -33,5 +34,11 @@ public sealed class MessageService(
             throw new Exception($"User with id: {request.SenderId} is not inside room with id: {request.RoomId}");
 
         return await _messageRepository.SendMessage(request.ToDomain());
+    }
+
+    public async Task<IEnumerable<MessageResponse>> GetMessagesAsync(string roomId, int pageSize, string? beforeId = null)
+    {
+        var messages = await _messageRepository.GetMessagesAsync(roomId, pageSize, beforeId);
+        return messages.Select(MessageResponse.FromDomain);
     }
 }

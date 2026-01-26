@@ -10,7 +10,6 @@ public sealed class MessageRepository(RedisContext redisContext) : IMessageRepos
     private static string StreamKey(string roomId)
         => $"room:{roomId}:messages";
 
-    // CREATE
     public async Task<string> SendMessage(Message message)
     {
         var id = await _redisContext.StreamAddAsync(
@@ -24,33 +23,33 @@ public sealed class MessageRepository(RedisContext redisContext) : IMessageRepos
         return id!;
     }
 
-    // READ (pagination)
-    // public async Task<IReadOnlyList<Message>> GetMessagesAsync(
-    //     string roomId,
-    //     int pageSize,
-    //     string? beforeId = null)
-    // {
-    //     var key = StreamKey(roomId);
-    //
-    //     // ako nema beforeId → čitaj od kraja
-    //     var end = beforeId ?? "+";
-    //     var start = "-";
-    //
-    //     var entries = await _db.StreamRangeAsync(
-    //         key,
-    //         minId: start,
-    //         maxId: end,
-    //         count: pageSize,
-    //         messageOrder: Order.Descending);
-    //
-    //     return entries.Select(e => new Message
-    //     {
-    //         Id = e.Id!,
-    //         RoomId = roomId,
-    //         SenderId = e.Values.First(v => v.Name == "senderId").Value!,
-    //         Text = e.Values.First(v => v.Name == "text").Value!,
-    //         SentAt = DateTime.Parse(
-    //             e.Values.First(v => v.Name == "sentAt").Value!)
-    //     }).ToList();
-    //}
+    public async Task<IReadOnlyList<Message>> GetMessagesAsync(string roomId, int pageSize, string? beforeId = null)
+    {
+        var key = StreamKey(roomId);
+
+        // + means "highest id" -> the newest message
+        // - means "lowest id" -> the oldest message
+
+        // here we start reading from the newest message or from the provided message id.
+        // I say "start" but variable is called "end" because we use Descending order to read from
+        // the newest up to the oldest messages.
+        var end = beforeId ?? "+";
+        const string start = "-";
+
+        var entries = await _redisContext.StreamRangeAsync(
+            key,
+            minId: start,
+            maxId: end,
+            count: pageSize,
+            messageOrder: Order.Descending);
+
+        return entries.Select(e => new Message
+        {
+            Id = e.Id!,
+            RoomId = roomId,
+            SenderId = e["senderId"],
+            Text = e["text"],
+            SentAt = DateTime.Parse(e["sentAt"])
+        }).ToList();
+    }
 }
