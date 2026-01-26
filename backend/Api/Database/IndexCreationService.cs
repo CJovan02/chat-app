@@ -12,8 +12,8 @@ public class IndexCreationService(RedisContext redisContext) : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Creating redis indexes for entities...");
-        await redisContext.CreateIndexAsync(typeof(User));
-        await redisContext.CreateIndexAsync(typeof(Room));
+        await redisContext.DropAndCreateIndexAsync(typeof(User));
+        await redisContext.DropAndCreateIndexAsync(typeof(Room));
         Console.WriteLine("Redis index creation finished");
     }
 

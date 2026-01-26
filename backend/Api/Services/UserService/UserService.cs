@@ -39,7 +39,9 @@ public class UserService(IUserRepository userRepository, IUserRoomsRepository ro
 
     public async Task<string> CreateUserAsync(UserRequest request)
     {
-        if (await _userRepository.UserExistsAsync(request.Username))
+        var exists = await _userRepository.UserExistsByUsernameAsync(request.Username);
+        var user = await _userRepository.GetUserByUsernameAsync(request.Username);
+        if (exists)
             throw new Exception("User with provided username already exists");
 
         return await _userRepository.CreateUserAsync(request.ToDomain());

@@ -2,12 +2,19 @@ using backend.Dto.Rooms;
 using backend.Dto.Rooms.Request;
 using backend.Dto.Rooms.Response;
 using backend.Repositories.RoomRepository;
+using backend.Repositories.UserRepository;
+using backend.Repositories.UserRoomRepository;
 
 namespace backend.Services.RoomService;
 
-public class RoomService(IRoomRepository roomRepository) : IRoomService
+public class RoomService(
+    IRoomRepository roomRepository,
+    IUserRoomsRepository userRoomsRepository,
+    IUserRepository userRepository) : IRoomService
 {
     private readonly IRoomRepository _roomRepository = roomRepository;
+    private readonly IUserRoomsRepository _userRoomsRepository = userRoomsRepository;
+    private readonly IUserRepository _userRepository = userRepository;
 
     public async Task<IEnumerable<RoomResponse>> GetAllRoomsAsync()
     {
@@ -23,9 +30,29 @@ public class RoomService(IRoomRepository roomRepository) : IRoomService
         return RoomResponse.FromDomain(room);
     }
 
-    public Task<string> CreateRoomAsync(RoomRequest request)
+    public async Task<string> CreateRoomAsync(RoomRequest request)
     {
-        return _roomRepository.CreateRoomAsync(request.ToDomain());
+        request = new RoomRequest(request.ParticipantIds.Distinct().ToList());
+
+        if (request.ParticipantIds.Count < 2)
+            throw new Exception("You need to provide at least two participants");
+
+        // check if provided users exist
+        foreach (var participantId in request.ParticipantIds)
+        {
+            if (!(await _userRepository.UserExistsByIdAsync(participantId)))
+                throw new Exception($"User {participantId} not found");
+        }
+
+        var roomId = await _roomRepository.CreateRoomAsync(request.ToDomain());
+
+        // Add this room for each participant id
+        foreach (var participantId in request.ParticipantIds)
+        {
+            await _userRoomsRepository.AddRoomToUserAsync(participantId, roomId);
+        }
+
+        return roomId;
     }
 
     public Task UpdateRoomAsync(RoomRequest request)

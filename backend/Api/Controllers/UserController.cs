@@ -16,6 +16,12 @@ public class UserController(IUserService userService) : ControllerBase
         return Ok(await _userService.GetAllUsersAsync());
     }
 
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetById(string userId)
+    {
+        return Ok(await _userService.GetUserByIdAsync(userId));
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] UserRequest request)
     {

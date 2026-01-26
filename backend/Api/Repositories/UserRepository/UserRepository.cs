@@ -9,7 +9,12 @@ public class UserRepository(RedisContext redisContext) : IUserRepository
 {
     private readonly RedisCollection<User> _users = redisContext.Users;
 
-    public Task<bool> UserExistsAsync(string username)
+    public Task<bool> UserExistsByIdAsync(string id)
+    {
+        return _users.AnyAsync(u => u.Id == id);
+    }
+
+    public Task<bool> UserExistsByUsernameAsync(string username)
     {
         return _users.AnyAsync(u => u.Username == username);
     }

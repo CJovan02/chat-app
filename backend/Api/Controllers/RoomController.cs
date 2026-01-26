@@ -16,6 +16,12 @@ public class RoomController(IRoomService roomService) : ControllerBase
         return Ok(await _roomService.GetAllRoomsAsync());
     }
 
+    [HttpGet("{roomId}")]
+    public async Task<IActionResult> Get(string roomId)
+    {
+        return Ok(await _roomService.GetRoomByIdAsync(roomId));
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(RoomRequest request)
     {

@@ -34,6 +34,12 @@ public sealed class RedisContext(IConnectionMultiplexer connection)
         }
     }
 
+    public async Task<bool> DropAndCreateIndexAsync(Type type)
+    {
+        await _provider.Connection.DropIndexAsync(type);
+        return await _provider.Connection.CreateIndexAsync(type);
+    }
+
     public Task<bool> CreateIndexAsync(Type type)
     {
         return _provider.Connection.CreateIndexAsync(type);
