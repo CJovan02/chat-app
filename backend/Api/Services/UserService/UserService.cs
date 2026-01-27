@@ -3,6 +3,7 @@ using backend.Dto.Users.Request;
 using backend.Dto.Users.Response;
 using backend.Repositories.UserRepository;
 using backend.Repositories.UserRoomRepository;
+using BCrypt.Net;
 
 namespace backend.Services.UserService;
 
@@ -15,6 +16,20 @@ public class UserService(IUserRepository userRepository, IUserRoomsRepository ro
     {
         var users = await _userRepository.GetAllUsersAsync();
         return users.Select(UserResponse.FromDomain);
+    }
+
+    public async Task<UserResponseWithRooms> LoginAsync(LoginRequest request)
+    {
+        var user = await _userRepository.GetUserByUsernameAsync(request.Username);
+        if (user is null)
+            throw new Exception($"User {request.Username} not found");
+
+        var correctPassword = BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
+        if (!correctPassword)
+            throw new Exception("Wrong password");
+
+        var rooms = await _roomsRepository.GetUserRoomsAsync(user.Id);
+        return UserResponseWithRooms.FromDomain(user, rooms);
     }
 
     public async Task<UserResponseWithRooms?> GetUserByIdAsync(string userId)
@@ -37,17 +52,17 @@ public class UserService(IUserRepository userRepository, IUserRoomsRepository ro
         return UserResponseWithRooms.FromDomain(user, roomIds);
     }
 
-    public async Task<string> CreateUserAsync(UserRequest request)
+    public async Task<string> CreateUserAsync(CreateUserRequest request)
     {
-        var exists = await _userRepository.UserExistsByUsernameAsync(request.Username);
-        var user = await _userRepository.GetUserByUsernameAsync(request.Username);
-        if (exists)
+        if (await _userRepository.UserExistsByUsernameAsync(request.Username))
             throw new Exception("User with provided username already exists");
 
-        return await _userRepository.CreateUserAsync(request.ToDomain());
+        var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+        return await _userRepository.CreateUserAsync(request.ToDomain(passwordHash));
     }
 
-    public Task UpdateUserAsync(UserRequest request)
+    public Task UpdateUserAsync(UpdateUserRequest request)
     {
         return _userRepository.UpdateUserAsync(request.ToDomain());
     }

@@ -23,9 +23,15 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] UserRequest request)
+    public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
     {
         return Ok(await _userService.CreateUserAsync(request));
+    }
+
+    [HttpGet("login")]
+    public async Task<IActionResult> Login([FromQuery] LoginRequest request)
+    {
+        return Ok(await _userService.LoginAsync(request));
     }
 
     [HttpDelete]

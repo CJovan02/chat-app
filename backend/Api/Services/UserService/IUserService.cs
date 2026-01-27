@@ -8,7 +8,8 @@ public interface IUserService
     Task<IEnumerable<UserResponse>> GetAllUsersAsync();
     Task<UserResponseWithRooms?> GetUserByIdAsync(string userId);
     Task<UserResponseWithRooms?> GetUserByUsernameAsync(string username);
-    Task<string> CreateUserAsync(UserRequest request);
-    Task UpdateUserAsync(UserRequest request);
+    Task<UserResponseWithRooms> LoginAsync(LoginRequest request);
+    Task<string> CreateUserAsync(CreateUserRequest request);
+    Task UpdateUserAsync(UpdateUserRequest request);
     Task DeleteUserAsync(string userId);
 }

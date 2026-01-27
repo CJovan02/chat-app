@@ -1,7 +1,8 @@
 namespace backend.Dto.Users.Request;
 
-public sealed record UserRequest(
+public sealed record CreateUserRequest(
     string Username,
     string DisplayName,
-    int Age
+    int Age,
+    string Password
 );
