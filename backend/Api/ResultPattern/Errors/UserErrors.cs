@@ -12,4 +12,7 @@ public static class UserErrors
 
     public static Error WrongPassword() =>
         new(StatusCodes.Unauthorized, "Wrong password");
+
+    public static Error NotInsideRoom(string userId, string roomId) =>
+        new(StatusCodes.BadRequest, $"User with id: {userId} is not inside the room: {roomId}");
 }

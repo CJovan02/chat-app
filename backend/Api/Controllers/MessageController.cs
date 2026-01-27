@@ -1,4 +1,5 @@
 using backend.Dto.Messages.Request;
+using backend.ResultPattern;
 using backend.Services.MessageService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +14,12 @@ public class MessageController(IMessageService messageService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetMessagesAsync(string roomId, int pageSize, string? beforeId)
     {
-        return Ok(await _messageService.GetMessagesAsync(roomId, pageSize, beforeId));
+        return (await _messageService.GetMessagesAsync(roomId, pageSize, beforeId)).ToActionResult();
     }
 
     [HttpPost]
     public async Task<IActionResult> SendMessage([FromBody] MessageRequest request)
     {
-        return Ok(await _messageService.SendMessage(request));
+        return (await _messageService.SendMessage(request)).ToActionResult();
     }
 }
