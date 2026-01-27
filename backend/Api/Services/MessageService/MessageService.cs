@@ -19,7 +19,7 @@ public sealed class MessageService(
     private readonly IRoomRepository _roomRepository = roomRepository;
     private readonly IUserRoomsRepository _userRoomsRepository = userRoomsRepository;
 
-    public async Task<string> SendMessage(MessageRequest request)
+    public async Task<MessageResponse> SendMessage(MessageRequest request)
     {
         // check if sender exists
         if (!(await _userRepository.UserExistsByIdAsync(request.SenderId)))
@@ -33,7 +33,10 @@ public sealed class MessageService(
         if (!(await _userRoomsRepository.IsUserInRoom(request.SenderId, request.RoomId)))
             throw new Exception($"User with id: {request.SenderId} is not inside room with id: {request.RoomId}");
 
-        return await _messageRepository.SendMessage(request.ToDomain());
+
+        var id = await _messageRepository.SendMessage(request.ToDomain());
+
+        return MessageResponse.FromDomain(request.ToDomain(id));
     }
 
     public async Task<IEnumerable<MessageResponse>> GetMessagesAsync(string roomId, int pageSize, string? beforeId = null)

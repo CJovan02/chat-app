@@ -5,7 +5,7 @@ namespace backend.Services.MessageService;
 
 public interface IMessageService
 {
-    Task<string> SendMessage(MessageRequest request);
+    Task<MessageResponse> SendMessage(MessageRequest request);
 
     Task<IEnumerable<MessageResponse>> GetMessagesAsync(string roomId, int pageSize, string? beforeId = null);
 }
