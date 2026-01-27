@@ -8,5 +8,5 @@ public interface IMessageService
 {
     Task<Result<MessageResponse>> SendMessage(MessageRequest request);
 
-    Task<Result<IEnumerable<MessageResponse>>> GetMessagesAsync(string roomId, int pageSize, string? beforeId = null);
+    Task<Result<IEnumerable<MessageResponse>>> GetMessagesAsync(GetMessagesRequest request);
 }

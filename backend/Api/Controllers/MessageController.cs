@@ -12,9 +12,9 @@ public class MessageController(IMessageService messageService) : ControllerBase
     private readonly IMessageService _messageService = messageService;
 
     [HttpGet]
-    public async Task<IActionResult> GetMessagesAsync(string roomId, int pageSize, string? beforeId)
+    public async Task<IActionResult> GetMessagesAsync([FromQuery] GetMessagesRequest request)
     {
-        return (await _messageService.GetMessagesAsync(roomId, pageSize, beforeId)).ToActionResult();
+        return (await _messageService.GetMessagesAsync(request)).ToActionResult();
     }
 
     [HttpPost]

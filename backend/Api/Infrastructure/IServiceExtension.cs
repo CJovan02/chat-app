@@ -1,3 +1,4 @@
+using backend.Dto.Id;
 using backend.ExceptionHandlers;
 using backend.Infrastructure.EnvironmentConfig;
 using backend.Repositories.MessageRepository;
@@ -46,6 +47,7 @@ public static class IServiceExtension
     public static IServiceCollection AddFluentValidationAndValidators(this IServiceCollection services)
     {
         return services
+            .AddValidatorsFromAssembly(typeof(IdRequest).Assembly, includeInternalTypes: true)
             .AddValidatorsFromAssemblyContaining<Program>()
             .AddFluentValidationAutoValidation();
     }

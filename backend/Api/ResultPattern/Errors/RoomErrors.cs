@@ -8,5 +8,5 @@ public static class RoomErrors
         new(StatusCodes.BadRequest, $"Participant with id: {id} doesn't exist.");
 
     public static Error NotEnoughParticipants() =>
-        new(StatusCodes.BadRequest, "You need to provide at least two participants");
+        new(StatusCodes.BadRequest, "You need to provide at least two distinct participants");
 }
