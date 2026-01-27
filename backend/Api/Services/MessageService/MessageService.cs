@@ -5,6 +5,8 @@ using backend.Repositories.MessageRepository;
 using backend.Repositories.RoomRepository;
 using backend.Repositories.UserRepository;
 using backend.Repositories.UserRoomRepository;
+using backend.ResultPattern;
+using backend.ResultPattern.Errors;
 
 namespace backend.Services.MessageService;
 
@@ -19,29 +21,32 @@ public sealed class MessageService(
     private readonly IRoomRepository _roomRepository = roomRepository;
     private readonly IUserRoomsRepository _userRoomsRepository = userRoomsRepository;
 
-    public async Task<MessageResponse> SendMessage(MessageRequest request)
+    public async Task<Result<MessageResponse>> SendMessage(MessageRequest request)
     {
         // check if sender exists
         if (!(await _userRepository.UserExistsByIdAsync(request.SenderId)))
-            throw new Exception($"Sender with id: {request.SenderId} does not exist");
+            return Result<MessageResponse>.Failure(UserErrors.NotFoundId(request.SenderId));
 
         // check if room exists
         if (!(await _roomRepository.RoomExists(request.RoomId)))
-            throw new Exception($"Room with id: {request.RoomId} does not exist");
+            return Result<MessageResponse>.Failure(RoomErrors.NotFound(request.RoomId));
 
         // check if sender is sending message in the room that he is inside of
         if (!(await _userRoomsRepository.IsUserInRoom(request.SenderId, request.RoomId)))
-            throw new Exception($"User with id: {request.SenderId} is not inside room with id: {request.RoomId}");
-
+            return Result<MessageResponse>.Failure(UserErrors.NotInsideRoom(request.SenderId, request.RoomId));
 
         var id = await _messageRepository.SendMessage(request.ToDomain());
 
-        return MessageResponse.FromDomain(request.ToDomain(id));
+        return Result<MessageResponse>.Success(MessageResponse.FromDomain(request.ToDomain(id)));
     }
 
-    public async Task<IEnumerable<MessageResponse>> GetMessagesAsync(string roomId, int pageSize, string? beforeId = null)
+    public async Task<Result<IEnumerable<MessageResponse>>> GetMessagesAsync(
+        string roomId,
+        int pageSize,
+        string? beforeId = null
+    )
     {
         var messages = await _messageRepository.GetMessagesAsync(roomId, pageSize, beforeId);
-        return messages.Select(MessageResponse.FromDomain);
+        return Result<IEnumerable<MessageResponse>>.Success(messages.Select(MessageResponse.FromDomain));
     }
 }

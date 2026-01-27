@@ -1,4 +1,5 @@
 using backend.Dto.Users.Request;
+using backend.ResultPattern;
 using backend.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        return Ok(await _userService.GetAllUsersAsync());
+        return (await _userService.GetAllUsersAsync()).ToActionResult();
     }
 
     [HttpGet("{userId}")]
@@ -25,19 +26,18 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
     {
-        return Ok(await _userService.CreateUserAsync(request));
+        return (await _userService.CreateUserAsync(request)).ToActionResult();
     }
 
     [HttpGet("login")]
     public async Task<IActionResult> Login([FromQuery] LoginRequest request)
     {
-        return Ok(await _userService.LoginAsync(request));
+        return (await _userService.LoginAsync(request)).ToActionResult();
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete(string roomId)
     {
-        await _userService.DeleteUserAsync(roomId);
-        return Ok();
+        return (await _userService.DeleteUserAsync(roomId)).ToActionResult();
     }
 }

@@ -13,6 +13,7 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Chat-App Backend API", Version = "v1" });
 });
 builder.Services.AddEnvVariables();
+builder.Services.AddExceptionHandlers();
 
 builder.Services.AddSignalR();
 

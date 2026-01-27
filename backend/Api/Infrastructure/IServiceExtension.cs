@@ -1,3 +1,4 @@
+using backend.ExceptionHandlers;
 using backend.Infrastructure.EnvironmentConfig;
 using backend.Repositories.MessageRepository;
 using backend.Repositories.RoomRepository;
@@ -31,5 +32,12 @@ public static class IServiceExtension
             .AddScoped<IUserService, UserService>()
             .AddScoped<IRoomService, RoomService>()
             .AddScoped<IMessageService, MessageService>();
+    }
+
+    public static IServiceCollection AddExceptionHandlers(this IServiceCollection services)
+    {
+        return services
+            .AddExceptionHandler<GlobalExceptionHandler>()
+            .AddProblemDetails();
     }
 }
