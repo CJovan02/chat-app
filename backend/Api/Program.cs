@@ -1,4 +1,5 @@
 using backend.Database;
+using backend.Hubs;
 using backend.Infrastructure;
 using backend.Infrastructure.HostedServices;
 using Microsoft.OpenApi.Models;
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Chat-App Backend API", Version = "v1" });
 });
 builder.Services.AddEnvVariables();
+
+builder.Services.AddSignalR();
 
 // DB
 builder.Services.AddRedisConnectionMultiplexer();
@@ -38,5 +41,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
