@@ -2,7 +2,9 @@ using backend.Database;
 using backend.Hubs;
 using backend.Infrastructure;
 using backend.Infrastructure.HostedServices;
+using FluentValidation;
 using Microsoft.OpenApi.Models;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 builder.Services.AddEnvVariables();
 builder.Services.AddExceptionHandlers();
+builder.Services.AddFluentValidationAndValidators();
 
 builder.Services.AddSignalR();
 

@@ -7,6 +7,8 @@ using backend.Repositories.UserRoomRepository;
 using backend.Services.MessageService;
 using backend.Services.RoomService;
 using backend.Services.UserService;
+using FluentValidation;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace backend.Infrastructure;
 
@@ -39,5 +41,12 @@ public static class IServiceExtension
         return services
             .AddExceptionHandler<GlobalExceptionHandler>()
             .AddProblemDetails();
+    }
+
+    public static IServiceCollection AddFluentValidationAndValidators(this IServiceCollection services)
+    {
+        return services
+            .AddValidatorsFromAssemblyContaining<Program>()
+            .AddFluentValidationAutoValidation();
     }
 }
