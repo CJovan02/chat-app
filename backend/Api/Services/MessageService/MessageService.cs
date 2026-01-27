@@ -40,13 +40,9 @@ public sealed class MessageService(
         return Result<MessageResponse>.Success(MessageResponse.FromDomain(request.ToDomain(id)));
     }
 
-    public async Task<Result<IEnumerable<MessageResponse>>> GetMessagesAsync(
-        string roomId,
-        int pageSize,
-        string? beforeId = null
-    )
+    public async Task<Result<IEnumerable<MessageResponse>>> GetMessagesAsync(GetMessagesRequest request)
     {
-        var messages = await _messageRepository.GetMessagesAsync(roomId, pageSize, beforeId);
+        var messages = await _messageRepository.GetMessagesAsync(request.RoomId, request.PageSize, request.BeforeId);
         return Result<IEnumerable<MessageResponse>>.Success(messages.Select(MessageResponse.FromDomain));
     }
 }
