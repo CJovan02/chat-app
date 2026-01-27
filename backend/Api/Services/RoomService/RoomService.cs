@@ -4,6 +4,8 @@ using backend.Dto.Rooms.Response;
 using backend.Repositories.RoomRepository;
 using backend.Repositories.UserRepository;
 using backend.Repositories.UserRoomRepository;
+using backend.ResultPattern;
+using backend.ResultPattern.Errors;
 
 namespace backend.Services.RoomService;
 
@@ -16,32 +18,32 @@ public class RoomService(
     private readonly IUserRoomsRepository _userRoomsRepository = userRoomsRepository;
     private readonly IUserRepository _userRepository = userRepository;
 
-    public async Task<IEnumerable<RoomResponse>> GetAllRoomsAsync()
+    public async Task<Result<IEnumerable<RoomResponse>>> GetAllRoomsAsync()
     {
         var rooms = await _roomRepository.GetAllRoomsAsync();
-        return rooms.Select(RoomResponse.FromDomain);
+        return Result<IEnumerable<RoomResponse>>.Success(rooms.Select(RoomResponse.FromDomain));
     }
 
-    public async Task<RoomResponse?> GetRoomByIdAsync(string roomId)
+    public async Task<Result<RoomResponse?>> GetRoomByIdAsync(string roomId)
     {
         var room = await _roomRepository.GetRoomByIdAsync(roomId);
-        if (room is null) return null;
+        if (room is null) return Result<RoomResponse?>.Success(null);
 
-        return RoomResponse.FromDomain(room);
+        return Result<RoomResponse?>.Success(RoomResponse.FromDomain(room));
     }
 
-    public async Task<string> CreateRoomAsync(RoomRequest request)
+    public async Task<Result<string>> CreateRoomAsync(RoomRequest request)
     {
         request = new RoomRequest(request.ParticipantIds.Distinct().ToList());
 
         if (request.ParticipantIds.Count < 2)
-            throw new Exception("You need to provide at least two participants");
+            return Result<string>.Failure(RoomErrors.NotEnoughParticipants());
 
         // check if provided users exist
         foreach (var participantId in request.ParticipantIds)
         {
             if (!(await _userRepository.UserExistsByIdAsync(participantId)))
-                throw new Exception($"User {participantId} not found");
+                return Result<string>.Failure(RoomErrors.ParticipantNotFound(participantId));
         }
 
         var roomId = await _roomRepository.CreateRoomAsync(request.ToDomain());
@@ -52,23 +54,25 @@ public class RoomService(
             await _userRoomsRepository.AddRoomToUserAsync(participantId, roomId);
         }
 
-        return roomId;
+        return Result<string>.Success(roomId);
     }
 
-    public Task UpdateRoomAsync(RoomRequest request)
+    public async Task<Result> UpdateRoomAsync(RoomRequest request)
     {
-        return _roomRepository.UpdateRoomAsync(request.ToDomain());
+        await _roomRepository.UpdateRoomAsync(request.ToDomain());
+        return Result.Success();
     }
 
-    public async Task DeleteRoomAsync(string roomId)
+    public async Task<Result> DeleteRoomAsync(string roomId)
     {
         // Redis ORM package accepts full object in order to delete it, that's why we need to pull it first
         // This logic can also go inside repository, but I think it's fine like this
 
         var room = await _roomRepository.GetRoomByIdAsync(roomId);
         if (room is null)
-            throw new Exception("User not found");
+            return Result.Failure(RoomErrors.NotFound(roomId));
 
         await _roomRepository.DeleteRoomAsync(room);
+        return Result.Success();
     }
 }
