@@ -11,7 +11,7 @@ namespace backend.Database;
 /// low level Redis commands
 /// </summary>
 /// <param name="connection"></param>
-public sealed class RedisContext(IConnectionMultiplexer connection)
+public sealed class RedisContext(IConnectionMultiplexer connection, ILogger<RedisContext> logger)
 {
     // This is used for executing Redis commands
     private readonly IDatabase _db = connection.GetDatabase();
@@ -19,18 +19,20 @@ public sealed class RedisContext(IConnectionMultiplexer connection)
     // This is used for ORM
     private readonly RedisConnectionProvider _provider = new RedisConnectionProvider(connection);
 
+    private readonly ILogger<RedisContext> _logger = logger;
+
     public async Task PingAsync()
     {
         try
         {
             var latency = await _db.PingAsync();
-            Console.WriteLine("✅ Pinged your deployment. You successfully connected to Redis! Latency: " +
-                              latency.TotalMilliseconds + "ms");
+            _logger.LogInformation(
+                "✅ Pinged your deployment. You successfully connected to Redis! Latency: {LatencyTotalMilliseconds} ms",
+                latency.TotalMilliseconds);
         }
         catch (Exception e)
         {
-            Console.WriteLine("❌ Redis connection could not be established.");
-            Console.WriteLine(e);
+            _logger.LogError(e, "❌ Redis connection could not be established.\n");
         }
     }
 
