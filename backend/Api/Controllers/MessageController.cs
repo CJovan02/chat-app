@@ -12,12 +12,17 @@ public class MessageController(IMessageService messageService) : ControllerBase
     private readonly IMessageService _messageService = messageService;
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetMessagesAsync([FromQuery] GetMessagesRequest request)
     {
         return (await _messageService.GetMessagesAsync(request)).ToActionResult();
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> SendMessage([FromBody] MessageRequest request)
     {
         return (await _messageService.SendMessage(request)).ToActionResult();
