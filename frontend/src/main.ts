@@ -3,6 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 
 const isMac = process.platform === 'darwin';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -10,12 +11,17 @@ if (started) {
 }
 
 const createWindow = () => {
+  const preload = path.join(__dirname, 'preload.js');
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      devTools: isDevelopment,
+      contextIsolation: true,
+      nodeIntegration: true,
+      nodeIntegrationInSubFrames: false,
+      preload: preload,
     },
   });
 
