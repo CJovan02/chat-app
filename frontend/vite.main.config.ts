@@ -1,24 +1,17 @@
-import path from 'path';
 import { defineConfig } from 'vite';
+import path from 'path';
 
 export default defineConfig({
   build: {
-    outDir: '.vite/build',
     lib: {
-      entry: './src/main.ts',
-      fileName: () => 'main',
-      formats: ['cjs'],
+      entry: path.resolve(__dirname, 'src/main.ts'),
+      formats: ['cjs'], // 👈 REQUIRED
+      fileName: () => 'main.cjs', // 👈 REQUIRED
     },
+    outDir: '.vite/build', // 👈 REQUIRED
+    emptyOutDir: false,
     rollupOptions: {
       external: ['electron'],
-      output: {
-        entryFileNames: 'main.cjs',
-      },
-    },
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
     },
   },
 });

@@ -1,4 +1,5 @@
 using backend.Dto.Users.Request;
+using backend.Dto.Users.Response;
 using backend.ResultPattern;
 using backend.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
@@ -11,33 +12,21 @@ public class UserController(IUserService userService) : ControllerBase
 {
     private readonly IUserService _userService = userService;
 
-    [HttpGet]
-    public async Task<IActionResult> GetAll()
-    {
-        return (await _userService.GetAllUsersAsync()).ToActionResult();
-    }
-
-    [HttpGet("{userId}")]
-    public async Task<IActionResult> GetById(string userId)
-    {
-        return Ok(await _userService.GetUserByIdAsync(userId));
-    }
-
     [HttpPost]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
     {
         return (await _userService.CreateUserAsync(request)).ToActionResult();
     }
 
     [HttpGet("login")]
+    [ProducesResponseType(typeof(UserResponseWithRooms), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Login([FromQuery] LoginRequest request)
     {
         return (await _userService.LoginAsync(request)).ToActionResult();
-    }
-
-    [HttpDelete]
-    public async Task<IActionResult> Delete(string roomId)
-    {
-        return (await _userService.DeleteUserAsync(roomId)).ToActionResult();
     }
 }

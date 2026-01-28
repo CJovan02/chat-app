@@ -7,7 +7,7 @@ namespace backend.Services.RoomService;
 public interface IRoomService
 {
     Task<Result<IEnumerable<RoomResponse>>> GetAllRoomsAsync();
-    Task<Result<RoomResponse?>> GetRoomByIdAsync(string roomId);
+    Task<Result<RoomResponse>> GetRoomByIdAsync(string roomId);
     Task<Result<string>> CreateRoomAsync(RoomRequest request);
     Task<Result> UpdateRoomAsync(RoomRequest request);
     Task<Result> DeleteRoomAsync(string roomId);
