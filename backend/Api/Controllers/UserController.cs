@@ -1,4 +1,5 @@
 using backend.Dto.Users.Request;
+using backend.Dto.Users.Response;
 using backend.ResultPattern;
 using backend.Services.UserService;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +13,7 @@ public class UserController(IUserService userService) : ControllerBase
     private readonly IUserService _userService = userService;
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
     {
@@ -20,7 +21,7 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet("login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserResponseWithRooms), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

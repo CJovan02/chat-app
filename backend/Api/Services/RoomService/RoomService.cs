@@ -24,10 +24,11 @@ public class RoomService(
         return Result<IEnumerable<RoomResponse>>.Success(rooms.Select(RoomResponse.FromDomain));
     }
 
-    public async Task<Result<RoomResponse?>> GetRoomByIdAsync(string roomId)
+    public async Task<Result<RoomResponse>> GetRoomByIdAsync(string roomId)
     {
         var room = await _roomRepository.GetRoomByIdAsync(roomId);
-        if (room is null) return Result<RoomResponse?>.Success(null);
+        if (room is null)
+            return Result<RoomResponse>.Failure(RoomErrors.NotFound(roomId));
 
         return Result<RoomResponse?>.Success(RoomResponse.FromDomain(room));
     }

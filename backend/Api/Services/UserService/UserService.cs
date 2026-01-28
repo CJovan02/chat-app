@@ -33,20 +33,22 @@ public class UserService(IUserRepository userRepository, IUserRoomsRepository ro
         return Result<UserResponseWithRooms?>.Success(UserResponseWithRooms.FromDomain(user, rooms));
     }
 
-    public async Task<Result<UserResponseWithRooms?>> GetUserByIdAsync(string userId)
+    public async Task<Result<UserResponseWithRooms>> GetUserByIdAsync(string userId)
     {
         var user = await _userRepository.GetUserByIdAsync(userId);
-        if (user == null) return Result<UserResponseWithRooms?>.Success(null);
+        if (user == null)
+            return Result<UserResponseWithRooms>.Failure(UserErrors.NotFoundId(userId));
 
         var roomIds = (await _roomsRepository.GetUserRoomsAsync(user.Id));
 
         return Result<UserResponseWithRooms?>.Success(UserResponseWithRooms.FromDomain(user, roomIds));
     }
 
-    public async Task<Result<UserResponseWithRooms?>> GetUserByUsernameAsync(string username)
+    public async Task<Result<UserResponseWithRooms>> GetUserByUsernameAsync(string username)
     {
         var user = await _userRepository.GetUserByUsernameAsync(username);
-        if (user == null) return Result<UserResponseWithRooms?>.Success(null);
+        if (user == null)
+            return Result<UserResponseWithRooms>.Failure(UserErrors.NotFoundUsername(username));
 
         var roomIds = (await _roomsRepository.GetUserRoomsAsync(user.Id));
 
