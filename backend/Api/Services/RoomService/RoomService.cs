@@ -36,7 +36,7 @@ public class RoomService(
     public async Task<Result<string>> CreateRoomAsync(RoomRequest request)
     {
         // Grab only distinct id's
-        request = new RoomRequest(request.ParticipantIds.Distinct().ToList());
+        request = new RoomRequest { ParticipantIds = request.ParticipantIds.Distinct().ToList() };
 
         // check if provided users exist
         foreach (var participantId in request.ParticipantIds)
