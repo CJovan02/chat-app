@@ -53,6 +53,8 @@
     "vite": "^5.4.21"
   },
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-query": "^5.90.20",
     "@vitejs/plugin-react": "^5.1.2",
