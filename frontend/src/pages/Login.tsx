@@ -10,10 +10,11 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { FormProvider, useForm, SubmitHandler } from 'react-hook-form';
 import { GetUserLoginParams } from '@/api/generated/model';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import TextInput from '@/components/custom/textInput';
 
 export const loginSchema = z.object({
   Username: z.string().min(1, 'Username is required'),
@@ -24,13 +25,13 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormValues>({
+  const methods = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
 
   const navigateToRegister = () => navigate('/register');
 
@@ -59,57 +60,34 @@ const Login = () => {
             </div>
           </CardHeader>
           <CardContent className='pt-2'>
-            <form className='space-y-4'>
-              <div className='flex flex-col gap-4'>
-                <div className='grid gap-2'>
-                  <Label
-                    htmlFor='username'
-                    className='font-semibold'>
-                    Username
-                  </Label>
-                  <Input
-                    id='username'
-                    type='text'
+            <FormProvider {...methods}>
+              <form
+                id='login-form'
+                className='space-y-4'
+                onSubmit={handleSubmit(onSubmit)}>
+                <div className='flex flex-col gap-4'>
+                  <TextInput
+                    id='Username'
+                    label='Username'
                     placeholder='Joca'
-                    className='h-10'
                     required
-                    {...register('Username', { required: true })}
                   />
-                  {errors.Username && (
-                    <p className='text-sm text-red-600'>
-                      {errors.Username.message}
-                    </p>
-                  )}
-                </div>
-                <div className='grid gap-2'>
-                  <div className='flex items-center justify-between'>
-                    <Label
-                      htmlFor='password'
-                      className='font-semibold'>
-                      Password
-                    </Label>
-                  </div>
-                  <Input
-                    id='password'
+                  <TextInput
+                    id='Password'
+                    label='Password'
                     type='password'
-                    className='h-10'
+                    placeholder='********'
                     required
-                    {...register('Password', { required: true })}
                   />
-                  {errors.Password && (
-                    <p className='text-sm text-red-600'>
-                      {errors.Password.message}
-                    </p>
-                  )}
                 </div>
-              </div>
-            </form>
+              </form>
+            </FormProvider>
           </CardContent>
           <CardFooter className='flex-col gap-3 pt-4'>
             <Button
               type='submit'
-              className='w-full h-10 font-semibold'
-              onClick={}>
+              form='login-form'
+              className='w-full h-10 font-semibold'>
               Login
             </Button>
           </CardFooter>
