@@ -10,11 +10,33 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { GetUserLoginParams } from '@/api/generated/model';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+export const loginSchema = z.object({
+  Username: z.string().min(1, 'Username is required'),
+  Password: z.string().min(1, 'Password is required'),
+});
+
+export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+  });
 
   const navigateToRegister = () => navigate('/register');
+
+  const onSubmit = (data: LoginFormValues) => {
+    console.log(data);
+  };
 
   return (
     <div className='flex min-h-screen items-start justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-6 sm:items-center sm:px-6 sm:py-0'>
@@ -51,7 +73,13 @@ const Login = () => {
                     placeholder='Joca'
                     className='h-10'
                     required
+                    {...register('Username', { required: true })}
                   />
+                  {errors.Username && (
+                    <p className='text-sm text-red-600'>
+                      {errors.Username.message}
+                    </p>
+                  )}
                 </div>
                 <div className='grid gap-2'>
                   <div className='flex items-center justify-between'>
@@ -66,7 +94,13 @@ const Login = () => {
                     type='password'
                     className='h-10'
                     required
+                    {...register('Password', { required: true })}
                   />
+                  {errors.Password && (
+                    <p className='text-sm text-red-600'>
+                      {errors.Password.message}
+                    </p>
+                  )}
                 </div>
               </div>
             </form>
@@ -74,7 +108,8 @@ const Login = () => {
           <CardFooter className='flex-col gap-3 pt-4'>
             <Button
               type='submit'
-              className='w-full h-10 font-semibold'>
+              className='w-full h-10 font-semibold'
+              onClick={}>
               Login
             </Button>
           </CardFooter>
