@@ -30,7 +30,7 @@ const Register = () => {
             <div>
               <Button
                 variant='link'
-                className='pl-0 w-full justify-start'
+                className='p-0 w-full justify-start'
                 onClick={navigateToLogin}>
                 <span className='block leading-tight'>
                   Already have an account?
@@ -39,7 +39,7 @@ const Register = () => {
               </Button>
             </div>
           </CardHeader>
-          <CardContent className='pt-4'>
+          <CardContent className='pt-2'>
             <form className='space-y-4'>
               <div className='flex flex-col gap-4'>
                 <div className='grid gap-2'>
