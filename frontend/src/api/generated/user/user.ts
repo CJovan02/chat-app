@@ -21,10 +21,11 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ChatItemResponse,
   CreateUserRequest,
   GetUserLoginParams,
   ProblemDetails,
-  UserResponseWithRooms,
+  UserResponse,
 } from '.././model';
 
 import { axiosInstance } from '../../axiosInstance';
@@ -126,7 +127,7 @@ export const usePostUser = <TError = ProblemDetails, TContext = unknown>(
   return useMutation(getPostUserMutationOptions(options), queryClient);
 };
 export type getUserLoginResponse200 = {
-  data: UserResponseWithRooms;
+  data: UserResponse;
   status: 200;
 };
 
@@ -160,7 +161,7 @@ export type getUserLoginResponse =
   | getUserLoginResponseSuccess
   | getUserLoginResponseError;
 
-export const getGetUserLoginUrl = (params?: GetUserLoginParams) => {
+export const getGetUserLoginUrl = (params: GetUserLoginParams) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -177,7 +178,7 @@ export const getGetUserLoginUrl = (params?: GetUserLoginParams) => {
 };
 
 export const getUserLogin = async (
-  params?: GetUserLoginParams,
+  params: GetUserLoginParams,
   options?: RequestInit,
 ): Promise<getUserLoginResponse> => {
   return axiosInstance<getUserLoginResponse>(getGetUserLoginUrl(params), {
@@ -194,7 +195,7 @@ export const getGetUserLoginQueryOptions = <
   TData = Awaited<ReturnType<typeof getUserLogin>>,
   TError = ProblemDetails,
 >(
-  params?: GetUserLoginParams,
+  params: GetUserLoginParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
@@ -225,7 +226,7 @@ export function useGetUserLogin<
   TData = Awaited<ReturnType<typeof getUserLogin>>,
   TError = ProblemDetails,
 >(
-  params: undefined | GetUserLoginParams,
+  params: GetUserLoginParams,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
@@ -247,7 +248,7 @@ export function useGetUserLogin<
   TData = Awaited<ReturnType<typeof getUserLogin>>,
   TError = ProblemDetails,
 >(
-  params?: GetUserLoginParams,
+  params: GetUserLoginParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
@@ -269,7 +270,7 @@ export function useGetUserLogin<
   TData = Awaited<ReturnType<typeof getUserLogin>>,
   TError = ProblemDetails,
 >(
-  params?: GetUserLoginParams,
+  params: GetUserLoginParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
@@ -284,7 +285,7 @@ export function useGetUserLogin<
   TData = Awaited<ReturnType<typeof getUserLogin>>,
   TError = ProblemDetails,
 >(
-  params?: GetUserLoginParams,
+  params: GetUserLoginParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
@@ -295,6 +296,178 @@ export function useGetUserLogin<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getGetUserLoginQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+export type getUserUserIdChatsResponse200 = {
+  data: ChatItemResponse[];
+  status: 200;
+};
+
+export type getUserUserIdChatsResponseSuccess =
+  getUserUserIdChatsResponse200 & {
+    headers: Headers;
+  };
+export type getUserUserIdChatsResponse = getUserUserIdChatsResponseSuccess;
+
+export const getGetUserUserIdChatsUrl = (userId: string) => {
+  return `/User/${userId}/chats`;
+};
+
+export const getUserUserIdChats = async (
+  userId: string,
+  options?: RequestInit,
+): Promise<getUserUserIdChatsResponse> => {
+  return axiosInstance<getUserUserIdChatsResponse>(
+    getGetUserUserIdChatsUrl(userId),
+    {
+      ...options,
+      method: 'GET',
+    },
+  );
+};
+
+export const getGetUserUserIdChatsQueryKey = (userId: string) => {
+  return [`/User/${userId}/chats`] as const;
+};
+
+export const getGetUserUserIdChatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUserUserIdChats>>,
+  TError = unknown,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserUserIdChats>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetUserUserIdChatsQueryKey(userId);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getUserUserIdChats>>
+  > = ({ signal }) => getUserUserIdChats(userId, { signal });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!userId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getUserUserIdChats>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetUserUserIdChatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUserUserIdChats>>
+>;
+export type GetUserUserIdChatsQueryError = unknown;
+
+export function useGetUserUserIdChats<
+  TData = Awaited<ReturnType<typeof getUserUserIdChats>>,
+  TError = unknown,
+>(
+  userId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserUserIdChats>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserUserIdChats>>,
+          TError,
+          Awaited<ReturnType<typeof getUserUserIdChats>>
+        >,
+        'initialData'
+      >;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetUserUserIdChats<
+  TData = Awaited<ReturnType<typeof getUserUserIdChats>>,
+  TError = unknown,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserUserIdChats>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUserUserIdChats>>,
+          TError,
+          Awaited<ReturnType<typeof getUserUserIdChats>>
+        >,
+        'initialData'
+      >;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetUserUserIdChats<
+  TData = Awaited<ReturnType<typeof getUserUserIdChats>>,
+  TError = unknown,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserUserIdChats>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useGetUserUserIdChats<
+  TData = Awaited<ReturnType<typeof getUserUserIdChats>>,
+  TError = unknown,
+>(
+  userId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getUserUserIdChats>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetUserUserIdChatsQueryOptions(userId, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

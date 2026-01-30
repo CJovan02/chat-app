@@ -6,6 +6,5 @@
  */
 
 export interface RoomRequest {
-  /** @nullable */
-  participantIds?: string[] | null;
+  participantIds: string[];
 }

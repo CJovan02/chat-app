@@ -5,6 +5,8 @@
  * OpenAPI spec version: v1
  */
 
+export * from './chatItemLastMessage';
+export * from './chatItemResponse';
 export * from './createUserRequest';
 export * from './getMessageParams';
 export * from './getUserLoginParams';
@@ -12,4 +14,4 @@ export * from './messageRequest';
 export * from './messageResponse';
 export * from './problemDetails';
 export * from './roomRequest';
-export * from './userResponseWithRooms';
+export * from './userResponse';

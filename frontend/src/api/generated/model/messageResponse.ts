@@ -6,13 +6,13 @@
  */
 
 export interface MessageResponse {
-  /** @nullable */
-  id?: string | null;
-  /** @nullable */
-  roomId?: string | null;
-  /** @nullable */
-  senderId?: string | null;
-  /** @nullable */
-  text?: string | null;
-  sentAt?: string;
+  /** @minLength 1 */
+  id: string;
+  /** @minLength 1 */
+  roomId: string;
+  /** @minLength 1 */
+  senderId: string;
+  /** @minLength 1 */
+  text: string;
+  sentAt: string;
 }

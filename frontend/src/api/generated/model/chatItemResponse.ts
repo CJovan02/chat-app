@@ -4,12 +4,14 @@
  * Chat-App Backend API
  * OpenAPI spec version: v1
  */
+import type { ChatItemLastMessage } from './chatItemLastMessage';
 
-export interface MessageRequest {
+export interface ChatItemResponse {
   /** @minLength 1 */
   roomId: string;
   /** @minLength 1 */
-  senderId: string;
+  otherUserId: string;
   /** @minLength 1 */
-  text: string;
+  otherUserDisplayName: string;
+  lastMessage?: ChatItemLastMessage;
 }

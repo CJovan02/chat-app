@@ -6,11 +6,11 @@
  */
 
 export interface CreateUserRequest {
-  /** @nullable */
-  username?: string | null;
-  /** @nullable */
-  displayName?: string | null;
-  age?: number;
-  /** @nullable */
-  password?: string | null;
+  /** @minLength 1 */
+  username: string;
+  /** @minLength 1 */
+  displayName: string;
+  age: number;
+  /** @minLength 1 */
+  password: string;
 }

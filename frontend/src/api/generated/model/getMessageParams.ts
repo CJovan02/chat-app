@@ -6,7 +6,7 @@
  */
 
 export type GetMessageParams = {
-  RoomId?: string;
-  PageSize?: number;
+  RoomId: string;
+  PageSize: number;
   BeforeId?: string;
 };

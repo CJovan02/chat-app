@@ -5,11 +5,12 @@
  * OpenAPI spec version: v1
  */
 
-export interface MessageRequest {
+export interface ChatItemLastMessage {
   /** @minLength 1 */
-  roomId: string;
+  id: string;
   /** @minLength 1 */
   senderId: string;
   /** @minLength 1 */
   text: string;
+  sentAt: string;
 }

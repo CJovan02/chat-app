@@ -5,11 +5,12 @@
  * OpenAPI spec version: v1
  */
 
-export interface MessageRequest {
+export interface UserResponse {
   /** @minLength 1 */
-  roomId: string;
+  id: string;
   /** @minLength 1 */
-  senderId: string;
+  username: string;
   /** @minLength 1 */
-  text: string;
+  displayName: string;
+  age: number;
 }

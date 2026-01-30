@@ -50,7 +50,7 @@ export type getMessageResponse =
   | getMessageResponseSuccess
   | getMessageResponseError;
 
-export const getGetMessageUrl = (params?: GetMessageParams) => {
+export const getGetMessageUrl = (params: GetMessageParams) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -67,7 +67,7 @@ export const getGetMessageUrl = (params?: GetMessageParams) => {
 };
 
 export const getMessage = async (
-  params?: GetMessageParams,
+  params: GetMessageParams,
   options?: RequestInit,
 ): Promise<getMessageResponse> => {
   return axiosInstance<getMessageResponse>(getGetMessageUrl(params), {
@@ -84,7 +84,7 @@ export const getGetMessageQueryOptions = <
   TData = Awaited<ReturnType<typeof getMessage>>,
   TError = ProblemDetails,
 >(
-  params?: GetMessageParams,
+  params: GetMessageParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
@@ -115,7 +115,7 @@ export function useGetMessage<
   TData = Awaited<ReturnType<typeof getMessage>>,
   TError = ProblemDetails,
 >(
-  params: undefined | GetMessageParams,
+  params: GetMessageParams,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
@@ -137,7 +137,7 @@ export function useGetMessage<
   TData = Awaited<ReturnType<typeof getMessage>>,
   TError = ProblemDetails,
 >(
-  params?: GetMessageParams,
+  params: GetMessageParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
@@ -159,7 +159,7 @@ export function useGetMessage<
   TData = Awaited<ReturnType<typeof getMessage>>,
   TError = ProblemDetails,
 >(
-  params?: GetMessageParams,
+  params: GetMessageParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
@@ -174,7 +174,7 @@ export function useGetMessage<
   TData = Awaited<ReturnType<typeof getMessage>>,
   TError = ProblemDetails,
 >(
-  params?: GetMessageParams,
+  params: GetMessageParams,
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
