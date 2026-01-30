@@ -11,10 +11,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
 
-  const navigateToRegister = () => navigate('/register');
+  const navigateToLogin = () => navigate('/login');
 
   return (
     <div className='flex min-h-screen items-start justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-6 sm:items-center sm:px-6 sm:py-0'>
@@ -22,17 +22,20 @@ const Login = () => {
         <Card className='border-0 shadow-2xl'>
           <CardHeader className='gap-1'>
             <CardTitle className='text-xl font-bold sm:text-2xl'>
-              Login to your account
+              Create an account
             </CardTitle>
             <CardDescription className='text-sm sm:text-base'>
-              Enter your username below to login to your account
+              Enter your information below to create your account
             </CardDescription>
             <div>
               <Button
                 variant='link'
                 className='pl-0 w-full justify-start'
-                onClick={navigateToRegister}>
-                Sign Up
+                onClick={navigateToLogin}>
+                <span className='block leading-tight'>
+                  Already have an account?
+                </span>
+                <span className='block leading-tight'>Login</span>
               </Button>
             </div>
           </CardHeader>
@@ -48,19 +51,44 @@ const Login = () => {
                   <Input
                     id='username'
                     type='text'
-                    placeholder='Joca'
+                    placeholder='john_doe'
                     className='h-10'
                     required
                   />
                 </div>
                 <div className='grid gap-2'>
-                  <div className='flex items-center justify-between'>
-                    <Label
-                      htmlFor='password'
-                      className='font-semibold'>
-                      Password
-                    </Label>
-                  </div>
+                  <Label
+                    htmlFor='displayName'
+                    className='font-semibold'>
+                    Display Name
+                  </Label>
+                  <Input
+                    id='displayName'
+                    type='text'
+                    placeholder='John Doe'
+                    className='h-10'
+                  />
+                </div>
+                <div className='grid gap-2'>
+                  <Label
+                    htmlFor='age'
+                    className='font-semibold'>
+                    Age
+                  </Label>
+                  <Input
+                    id='age'
+                    type='number'
+                    placeholder='25'
+                    className='h-10'
+                    required
+                  />
+                </div>
+                <div className='grid gap-2'>
+                  <Label
+                    htmlFor='password'
+                    className='font-semibold'>
+                    Password
+                  </Label>
                   <Input
                     id='password'
                     type='password'
@@ -75,7 +103,7 @@ const Login = () => {
             <Button
               type='submit'
               className='w-full h-10 font-semibold'>
-              Login
+              Register
             </Button>
           </CardFooter>
         </Card>
@@ -84,4 +112,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

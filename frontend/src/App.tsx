@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
+import Register from './pages/Register';
 
 const App = () => {
   return (
@@ -19,6 +20,10 @@ const App = () => {
         <Route
           path='/login'
           element={<Login />}
+        />
+        <Route
+          path='/register'
+          element={<Register />}
         />
       </Routes>
     </HashRouter>
