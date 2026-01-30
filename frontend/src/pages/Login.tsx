@@ -10,8 +10,13 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const navigateToRegister = () => navigate('/register');
+
   return (
     <div className='flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 to-slate-800'>
       <div className='w-full max-w-sm px-4'>
@@ -21,12 +26,13 @@ const Login = () => {
               Login to your account
             </CardTitle>
             <CardDescription className='text-base'>
-              Enter your email below to login to your account
+              Enter your username below to login to your account
             </CardDescription>
             <CardAction className='pt-2'>
               <Button
                 variant='link'
-                className='pl-0'>
+                className='pl-0'
+                onClick={navigateToRegister}>
                 Sign Up
               </Button>
             </CardAction>
@@ -36,14 +42,14 @@ const Login = () => {
               <div className='flex flex-col gap-4'>
                 <div className='grid gap-2'>
                   <Label
-                    htmlFor='email'
+                    htmlFor='username'
                     className='font-semibold'>
-                    Email
+                    Username
                   </Label>
                   <Input
-                    id='email'
-                    type='email'
-                    placeholder='m@example.com'
+                    id='username'
+                    type='text'
+                    placeholder='Joca'
                     className='h-10'
                     required
                   />
@@ -55,11 +61,6 @@ const Login = () => {
                       className='font-semibold'>
                       Password
                     </Label>
-                    <a
-                      href='#'
-                      className='text-xs text-blue-600 underline-offset-4 hover:underline'>
-                      Forgot your password?
-                    </a>
                   </div>
                   <Input
                     id='password'
@@ -76,11 +77,6 @@ const Login = () => {
               type='submit'
               className='w-full h-10 font-semibold'>
               Login
-            </Button>
-            <Button
-              variant='outline'
-              className='w-full h-10 font-semibold'>
-              Login with Google
             </Button>
           </CardFooter>
         </Card>
