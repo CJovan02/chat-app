@@ -15,4 +15,6 @@ public interface IMessageRepository
     /// </param>
     /// <returns></returns>
     Task<IReadOnlyList<Message>> GetMessagesAsync(string roomId, int pageSize, string? beforeId = null);
+
+    Task<Message?> GetLastMessageAsync(string roomId);
 }

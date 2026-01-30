@@ -21,12 +21,19 @@ public class UserController(IUserService userService) : ControllerBase
     }
 
     [HttpGet("login")]
-    [ProducesResponseType(typeof(UserResponseWithRooms), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Login([FromQuery] LoginRequest request)
     {
         return (await _userService.LoginAsync(request)).ToActionResult();
+    }
+
+    [HttpGet("{userId}/chats")]
+    [ProducesResponseType(typeof(IEnumerable<ChatItemResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetChats([FromRoute] string userId)
+    {
+        return (await _userService.GetUserChatsAsync(userId)).ToActionResult();
     }
 }

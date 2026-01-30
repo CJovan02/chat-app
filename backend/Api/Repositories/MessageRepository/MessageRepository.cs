@@ -43,13 +43,27 @@ public sealed class MessageRepository(RedisContext redisContext) : IMessageRepos
             count: pageSize,
             messageOrder: Order.Descending);
 
-        return entries.Select(e => new Message
-        {
-            Id = e.Id!,
-            RoomId = roomId,
-            SenderId = e["senderId"],
-            Text = e["text"],
-            SentAt = DateTime.Parse(e["sentAt"])
-        }).ToList();
+        return entries.Select(e => e.ToMessage(roomId)).ToList();
+    }
+
+    public async Task<Message?> GetLastMessageAsync(string roomId)
+    {
+        var key = StreamKey(roomId);
+
+        const string end = "+";
+        const string start = "-";
+
+        var entries = await _redisContext.StreamRangeAsync(
+            key,
+            minId: start,
+            maxId: end,
+            count: 1,
+            messageOrder: Order.Descending);
+
+        var entry = entries.FirstOrDefault();
+        if (entry.Equals(default(StreamEntry)))
+            return null;
+
+        return entry.ToMessage(roomId);
     }
 }
