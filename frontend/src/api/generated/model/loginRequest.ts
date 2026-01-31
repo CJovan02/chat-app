@@ -5,7 +5,9 @@
  * OpenAPI spec version: v1
  */
 
-export type GetUserLoginParams = {
-  Username: string;
-  Password: string;
-};
+export interface LoginRequest {
+  /** @minLength 1 */
+  username: string;
+  /** @minLength 1 */
+  password: string;
+}

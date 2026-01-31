@@ -9,10 +9,12 @@ import {
 } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm, SubmitHandler } from 'react-hook-form';
-import { GetUserLoginParams } from '@/api/generated/model';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextInput from '@/components/custom/textInput';
+import { axiosInstance } from '@/api/axiosInstance';
+import { usePostUserLogin } from '@/api/generated/user/user';
+import { LoginRequest } from '@/api/generated/model';
 
 export const loginSchema = z.object({
   Username: z.string().min(1, 'Username is required'),
@@ -31,10 +33,16 @@ const Login = () => {
     formState: { isSubmitting },
   } = methods;
 
+  const { mutateAsync, isPending, error } = usePostUserLogin();
+
   const navigateToRegister = () => navigate('/register');
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormValues) => {
+    //console.log(data);
+    const request: LoginRequest = {username: "jovan", password: "sifra"}
+
+    const result = await mutateAsync({data: request});
+    console.log(result);
   };
 
   return (

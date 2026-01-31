@@ -23,7 +23,8 @@ import type {
 import type {
   ChatItemResponse,
   CreateUserRequest,
-  GetUserLoginParams,
+  LoginRequest,
+  PatchUserUserIdParams,
   ProblemDetails,
   UserResponse,
 } from '.././model';
@@ -126,185 +127,118 @@ export const usePostUser = <TError = ProblemDetails, TContext = unknown>(
 > => {
   return useMutation(getPostUserMutationOptions(options), queryClient);
 };
-export type getUserLoginResponse200 = {
+export type postUserLoginResponse200 = {
   data: UserResponse;
   status: 200;
 };
 
-export type getUserLoginResponse400 = {
+export type postUserLoginResponse400 = {
   data: ProblemDetails;
   status: 400;
 };
 
-export type getUserLoginResponse401 = {
+export type postUserLoginResponse401 = {
   data: ProblemDetails;
   status: 401;
 };
 
-export type getUserLoginResponse404 = {
+export type postUserLoginResponse404 = {
   data: ProblemDetails;
   status: 404;
 };
 
-export type getUserLoginResponseSuccess = getUserLoginResponse200 & {
+export type postUserLoginResponseSuccess = postUserLoginResponse200 & {
   headers: Headers;
 };
-export type getUserLoginResponseError = (
-  | getUserLoginResponse400
-  | getUserLoginResponse401
-  | getUserLoginResponse404
+export type postUserLoginResponseError = (
+  | postUserLoginResponse400
+  | postUserLoginResponse401
+  | postUserLoginResponse404
 ) & {
   headers: Headers;
 };
 
-export type getUserLoginResponse =
-  | getUserLoginResponseSuccess
-  | getUserLoginResponseError;
+export type postUserLoginResponse =
+  | postUserLoginResponseSuccess
+  | postUserLoginResponseError;
 
-export const getGetUserLoginUrl = (params: GetUserLoginParams) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString());
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0
-    ? `/User/login?${stringifiedParams}`
-    : `/User/login`;
+export const getPostUserLoginUrl = () => {
+  return `/User/login`;
 };
 
-export const getUserLogin = async (
-  params: GetUserLoginParams,
+export const postUserLogin = async (
+  loginRequest: LoginRequest,
   options?: RequestInit,
-): Promise<getUserLoginResponse> => {
-  return axiosInstance<getUserLoginResponse>(getGetUserLoginUrl(params), {
+): Promise<postUserLoginResponse> => {
+  return axiosInstance<postUserLoginResponse>(getPostUserLoginUrl(), {
     ...options,
-    method: 'GET',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(loginRequest),
   });
 };
 
-export const getGetUserLoginQueryKey = (params?: GetUserLoginParams) => {
-  return [`/User/login`, ...(params ? [params] : [])] as const;
-};
-
-export const getGetUserLoginQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUserLogin>>,
+export const getPostUserLoginMutationOptions = <
   TError = ProblemDetails,
->(
-  params: GetUserLoginParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
-    >;
-  },
-) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey = queryOptions?.queryKey ?? getGetUserLoginQueryKey(params);
-
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserLogin>>> = ({
-    signal,
-  }) => getUserLogin(params, { signal });
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getUserLogin>>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postUserLogin>>,
     TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
+    { data: LoginRequest },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postUserLogin>>,
+  TError,
+  { data: LoginRequest },
+  TContext
+> => {
+  const mutationKey = ['postUserLogin'];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postUserLogin>>,
+    { data: LoginRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postUserLogin(data);
+  };
+
+  return { mutationFn, ...mutationOptions };
 };
 
-export type GetUserLoginQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getUserLogin>>
+export type PostUserLoginMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postUserLogin>>
 >;
-export type GetUserLoginQueryError = ProblemDetails;
+export type PostUserLoginMutationBody = LoginRequest;
+export type PostUserLoginMutationError = ProblemDetails;
 
-export function useGetUserLogin<
-  TData = Awaited<ReturnType<typeof getUserLogin>>,
-  TError = ProblemDetails,
->(
-  params: GetUserLoginParams,
-  options: {
-    query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
-    > &
-      Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserLogin>>,
-          TError,
-          Awaited<ReturnType<typeof getUserLogin>>
-        >,
-        'initialData'
-      >;
-  },
-  queryClient?: QueryClient,
-): DefinedUseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetUserLogin<
-  TData = Awaited<ReturnType<typeof getUserLogin>>,
-  TError = ProblemDetails,
->(
-  params: GetUserLoginParams,
+export const usePostUserLogin = <TError = ProblemDetails, TContext = unknown>(
   options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
-    > &
-      Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getUserLogin>>,
-          TError,
-          Awaited<ReturnType<typeof getUserLogin>>
-        >,
-        'initialData'
-      >;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-};
-export function useGetUserLogin<
-  TData = Awaited<ReturnType<typeof getUserLogin>>,
-  TError = ProblemDetails,
->(
-  params: GetUserLoginParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postUserLogin>>,
+      TError,
+      { data: LoginRequest },
+      TContext
     >;
   },
   queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
+): UseMutationResult<
+  Awaited<ReturnType<typeof postUserLogin>>,
+  TError,
+  { data: LoginRequest },
+  TContext
+> => {
+  return useMutation(getPostUserLoginMutationOptions(options), queryClient);
 };
-
-export function useGetUserLogin<
-  TData = Awaited<ReturnType<typeof getUserLogin>>,
-  TError = ProblemDetails,
->(
-  params: GetUserLoginParams,
-  options?: {
-    query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUserLogin>>, TError, TData>
-    >;
-  },
-  queryClient?: QueryClient,
-): UseQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getGetUserLoginQueryOptions(params, options);
-
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
-
 export type getUserUserIdChatsResponse200 = {
   data: ChatItemResponse[];
   status: 200;
@@ -476,3 +410,108 @@ export function useGetUserUserIdChats<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+export type patchUserUserIdResponse200 = {
+  data: void;
+  status: 200;
+};
+
+export type patchUserUserIdResponseSuccess = patchUserUserIdResponse200 & {
+  headers: Headers;
+};
+export type patchUserUserIdResponse = patchUserUserIdResponseSuccess;
+
+export const getPatchUserUserIdUrl = (
+  userId: string,
+  params?: PatchUserUserIdParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/User/${userId}?${stringifiedParams}`
+    : `/User/${userId}`;
+};
+
+export const patchUserUserId = async (
+  userId: string,
+  params?: PatchUserUserIdParams,
+  options?: RequestInit,
+): Promise<patchUserUserIdResponse> => {
+  return axiosInstance<patchUserUserIdResponse>(
+    getPatchUserUserIdUrl(userId, params),
+    {
+      ...options,
+      method: 'PATCH',
+    },
+  );
+};
+
+export const getPatchUserUserIdMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchUserUserId>>,
+    TError,
+    { userId: string; params?: PatchUserUserIdParams },
+    TContext
+  >;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchUserUserId>>,
+  TError,
+  { userId: string; params?: PatchUserUserIdParams },
+  TContext
+> => {
+  const mutationKey = ['patchUserUserId'];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchUserUserId>>,
+    { userId: string; params?: PatchUserUserIdParams }
+  > = (props) => {
+    const { userId, params } = props ?? {};
+
+    return patchUserUserId(userId, params);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PatchUserUserIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchUserUserId>>
+>;
+
+export type PatchUserUserIdMutationError = unknown;
+
+export const usePatchUserUserId = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchUserUserId>>,
+      TError,
+      { userId: string; params?: PatchUserUserIdParams },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchUserUserId>>,
+  TError,
+  { userId: string; params?: PatchUserUserIdParams },
+  TContext
+> => {
+  return useMutation(getPatchUserUserIdMutationOptions(options), queryClient);
+};

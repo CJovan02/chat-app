@@ -6,7 +6,20 @@ using FluentValidation;
 using Microsoft.OpenApi.Models;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
+const string frontendOrigin = "_frontendOrigin";
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: frontendOrigin,
+        policy  =>
+        {
+            policy
+                .WithOrigins("http://localhost:5174")
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
 
 DotNetEnv.Env.Load();
 
@@ -43,6 +56,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapControllers();
 }
+
+app.UseCors(frontendOrigin);
 
 app.UseHttpsRedirection();
 app.MapHub<ChatHub>("/chatHub");
