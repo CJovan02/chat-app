@@ -1,21 +1,16 @@
 import { create } from 'zustand';
 import { UserResponse } from '@/api/generated/model';
+import { postUserLoginResponse } from '@/api/generated/user/user';
 
 interface UserState {
-  id: string | null;
-  username: string | null;
-  displayName: string | null;
+  user: UserResponse | postUserLoginResponse | null;
   set: (user: UserResponse) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
-  id: null,
-  username: null,
-  displayName: null,
-  set: (user: UserResponse) =>
+  user: null,
+  set: (user: UserResponse | postUserLoginResponse) =>
     set({
-      id: user.id,
-      username: user.username,
-      displayName: user.displayName,
+      user,
     }),
 }));

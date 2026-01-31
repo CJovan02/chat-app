@@ -46,7 +46,7 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const navigate = useNavigate();
-  const { id, username, displayName, set } = useUserStore();
+  const { set } = useUserStore();
   const methods = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
@@ -69,15 +69,12 @@ const Login = () => {
       const result = await mutateAsync({ data: request });
       console.log('Login response:', result);
       console.log(isUserResponse(result));
-      if ('status' in result && result.status === 200) {
-        const data = result as UserResponse;
-      }
-      if (isUserResponse(result.data)) {
+      if (isUserResponse(result)) {
         set(result);
         console.log('suc');
         const st = useUserStore.getState();
         console.log('User store after login:', {
-          id: st.id,
+          user: st.user,
         });
         navigateToDashboard();
       }

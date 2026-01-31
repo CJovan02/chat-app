@@ -195,7 +195,7 @@ const Dashboard = () => {
           <div className='flex items-center justify-between gap-3'>
             <div className='flex items-center gap-3'>
               <div className='flex size-10 items-center justify-center rounded-full bg-indigo-500 text-sm font-semibold text-white'>
-                AP
+                {user.displayName[0].toUpperCase()}
               </div>
               <div>
                 <div className='text-sm font-semibold'>{user.displayName}</div>
