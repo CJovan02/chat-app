@@ -67,15 +67,8 @@ const Login = () => {
     };
     try {
       const result = await mutateAsync({ data: request });
-      console.log('Login response:', result);
-      console.log(isUserResponse(result));
-      if (isUserResponse(result)) {
-        set(result);
-        console.log('suc');
-        const st = useUserStore.getState();
-        console.log('User store after login:', {
-          user: st.user,
-        });
+      if (result.status === 200 && isUserResponse(result.data)) {
+        set(result.data);
         navigateToDashboard();
       }
     } catch (error) {

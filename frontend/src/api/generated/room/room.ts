@@ -16,6 +16,8 @@ import type { ProblemDetails, RoomRequest } from '.././model';
 
 import { axiosInstance } from '../../axiosInstance';
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 export type postRoomResponse200 = {
   data: string;
   status: 200;
@@ -61,6 +63,7 @@ export const getPostRoomMutationOptions = <
     { data: RoomRequest },
     TContext
   >;
+  request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof postRoom>>,
   TError,
@@ -68,13 +71,13 @@ export const getPostRoomMutationOptions = <
   TContext
 > => {
   const mutationKey = ['postRoom'];
-  const { mutation: mutationOptions } = options
+  const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postRoom>>,
@@ -82,7 +85,7 @@ export const getPostRoomMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return postRoom(data);
+    return postRoom(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -102,6 +105,7 @@ export const usePostRoom = <TError = ProblemDetails, TContext = unknown>(
       { data: RoomRequest },
       TContext
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
@@ -149,6 +153,7 @@ export const getDeleteRoomRoomIdMutationOptions = <
     { roomId: string },
     TContext
   >;
+  request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof deleteRoomRoomId>>,
   TError,
@@ -156,13 +161,13 @@ export const getDeleteRoomRoomIdMutationOptions = <
   TContext
 > => {
   const mutationKey = ['deleteRoomRoomId'];
-  const { mutation: mutationOptions } = options
+  const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof deleteRoomRoomId>>,
@@ -170,7 +175,7 @@ export const getDeleteRoomRoomIdMutationOptions = <
   > = (props) => {
     const { roomId } = props ?? {};
 
-    return deleteRoomRoomId(roomId);
+    return deleteRoomRoomId(roomId, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -190,6 +195,7 @@ export const useDeleteRoomRoomId = <TError = unknown, TContext = unknown>(
       { roomId: string },
       TContext
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<

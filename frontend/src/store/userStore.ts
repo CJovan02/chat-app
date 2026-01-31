@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import { UserResponse } from '@/api/generated/model';
-import { postUserLoginResponse } from '@/api/generated/user/user';
+import {
+  postUserLoginResponse,
+  postUserLoginResponseSuccess,
+} from '@/api/generated/user/user';
 
 interface UserState {
-  user: UserResponse | postUserLoginResponse | null;
-  set: (user: UserResponse) => void;
+  user: UserResponse | null;
+  set: (user: UserResponse | postUserLoginResponseSuccess) => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
   user: null,
-  set: (user: UserResponse | postUserLoginResponse) =>
-    set({
-      user,
-    }),
+  set: (user: UserResponse) => set({ user }),
 }));

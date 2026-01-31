@@ -29,6 +29,8 @@ import type {
 
 import { axiosInstance } from '../../axiosInstance';
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 export type getMessageResponse200 = {
   data: MessageResponse[];
   status: 200;
@@ -89,15 +91,16 @@ export const getGetMessageQueryOptions = <
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey = queryOptions?.queryKey ?? getGetMessageQueryKey(params);
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof getMessage>>> = ({
     signal,
-  }) => getMessage(params, { signal });
+  }) => getMessage(params, { signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getMessage>>,
@@ -128,6 +131,7 @@ export function useGetMessage<
         >,
         'initialData'
       >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -150,6 +154,7 @@ export function useGetMessage<
         >,
         'initialData'
       >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -164,6 +169,7 @@ export function useGetMessage<
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -179,6 +185,7 @@ export function useGetMessage<
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMessage>>, TError, TData>
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -249,6 +256,7 @@ export const getPostMessageMutationOptions = <
     { data: MessageRequest },
     TContext
   >;
+  request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof postMessage>>,
   TError,
@@ -256,13 +264,13 @@ export const getPostMessageMutationOptions = <
   TContext
 > => {
   const mutationKey = ['postMessage'];
-  const { mutation: mutationOptions } = options
+  const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postMessage>>,
@@ -270,7 +278,7 @@ export const getPostMessageMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return postMessage(data);
+    return postMessage(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -290,6 +298,7 @@ export const usePostMessage = <TError = ProblemDetails, TContext = unknown>(
       { data: MessageRequest },
       TContext
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
