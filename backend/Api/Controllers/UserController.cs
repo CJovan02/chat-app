@@ -36,4 +36,11 @@ public class UserController(IUserService userService) : ControllerBase
     {
         return (await _userService.GetUserChatsAsync(userId)).ToActionResult();
     }
+
+    [HttpPatch("{userId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Patch([FromRoute] string userId, [FromQuery] PatchUserRequest request)
+    {
+        return (await _userService.PatchUserAsync(userId, request)).ToActionResult();
+    }
 }

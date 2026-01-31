@@ -12,7 +12,7 @@ public static class UsersExtensions
             Username = request.Username,
             Age = request.Age,
             DisplayName = request.DisplayName,
-            PasswordHash =  hashedPassword,
+            PasswordHash = hashedPassword,
         };
     }
 

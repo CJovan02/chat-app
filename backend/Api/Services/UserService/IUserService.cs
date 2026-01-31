@@ -15,6 +15,7 @@ public interface IUserService
     Task<Result<IEnumerable<ChatItemResponse>>> GetUserChatsAsync(string userId);
     Task<Result<UserResponse>> LoginAsync(LoginRequest request);
     Task<Result<string>> CreateUserAsync(CreateUserRequest request);
+    Task<Result> PatchUserAsync(string userId, PatchUserRequest request);
     Task<Result> UpdateUserAsync(UpdateUserRequest request);
     Task<Result> DeleteUserAsync(string userId);
 }
