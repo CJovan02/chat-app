@@ -44,11 +44,15 @@ const TextInput = ({
                 required={required}
                 disabled={disabled}
                 ref={ref}
-                type={type || 'text'}
                 maxLength={maxLength}
                 placeholder={placeholder}
                 {...fieldRest}
                 value={field.value ?? ''}
+                onChange={(event) => {
+                  const value = event.target.value;
+                  field.onChange(type === 'number' ? Number(value) : value);
+                }}
+                type={type || 'text'}
               />
               {hasError && (
                 <p className='text-sm text-red-600'>{fieldError?.message}</p>
