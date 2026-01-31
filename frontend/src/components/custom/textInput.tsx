@@ -23,7 +23,7 @@ const TextInput = ({
 }: TextInputProps) => {
   const { control } = useFormContext();
   return (
-    <div>
+    <>
       <Controller
         name={id}
         control={control}
@@ -56,7 +56,7 @@ const TextInput = ({
             </>
           );
         }}></Controller>
-    </div>
+    </>
   );
 };
 

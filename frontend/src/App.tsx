@@ -4,6 +4,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import { ToastContainer, toast } from 'react-toastify';
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
+      <ToastContainer />
     </QueryClientProvider>
   </StrictMode>,
 );
