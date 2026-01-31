@@ -16,6 +16,7 @@ import { usePostUserLogin } from '@/api/generated/user/user';
 import { LoginRequest } from '@/api/generated/model';
 import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
+import UpdateUserDialog from '@/components/custom/updateUser/updateUserDialog';
 
 export const loginSchema = z.object({
   Username: z.string().min(3, 'Username is required'),
@@ -77,6 +78,7 @@ const Login = () => {
               </div>
             </CardHeader>
             <CardContent className='pt-2'>
+              <UpdateUserDialog />
               <FormProvider {...methods}>
                 <form
                   id='login-form'
