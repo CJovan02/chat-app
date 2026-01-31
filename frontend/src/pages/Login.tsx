@@ -18,8 +18,8 @@ import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
 
 export const loginSchema = z.object({
-  Username: z.string().min(3, 'Username is required'),
-  Password: z.string().min(5, 'Password is required'),
+  Username: z.string().min(3, 'Username must be at least 3 characters long.'),
+  Password: z.string().min(5, 'Password must be at least 5 characters long.'),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
@@ -44,9 +44,9 @@ const Login = () => {
       username: data.Username,
       password: data.Password,
     };
-
     const result = await mutateAsync({ data: request });
     console.log(result);
+    navigateToDashboard();
   };
 
   if (isError) {
