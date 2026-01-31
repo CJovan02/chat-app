@@ -108,6 +108,18 @@ public class UserService(
         return Result<string>.Success(await _userRepository.CreateUserAsync(request.ToDomain(passwordHash)));
     }
 
+    public async Task<Result> PatchUserAsync(string userId, PatchUserRequest request)
+    {
+        if (request.Age is null && request.DisplayName is null)
+            return Result.Failure(UserErrors.PatchArgumentsNull());
+
+        var user = await _userRepository.GetUserByIdAsync(userId);
+        if (user is null)
+            return Result.Failure(UserErrors.NotFoundId(userId));
+        await _userRepository.PatchUserAsync(user, request.DisplayName, request.Age);
+        return Result.Success();
+    }
+
     public async Task<Result> UpdateUserAsync(UpdateUserRequest request)
     {
         await _userRepository.UpdateUserAsync(request.ToDomain());

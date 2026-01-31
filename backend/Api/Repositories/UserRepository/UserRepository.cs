@@ -39,6 +39,16 @@ public class UserRepository(RedisContext redisContext) : IUserRepository
         return _users.InsertAsync(user);
     }
 
+    public async Task PatchUserAsync(User userToBePatched, string? newDisplayName, int? newAge)
+    {
+        if (newDisplayName is not null)
+            userToBePatched.DisplayName = newDisplayName;
+        if (newAge is int intAge)
+            userToBePatched.Age = intAge;
+
+        await _users.SaveAsync();
+    }
+
     public Task UpdateUserAsync(User user)
     {
         return _users.UpdateAsync(user);
