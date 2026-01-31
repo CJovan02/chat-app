@@ -20,12 +20,12 @@ public class UserController(IUserService userService) : ControllerBase
         return (await _userService.CreateUserAsync(request)).ToActionResult();
     }
 
-    [HttpGet("login")]
+    [HttpPost("login")]
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Login([FromQuery] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         return (await _userService.LoginAsync(request)).ToActionResult();
     }
@@ -35,5 +35,12 @@ public class UserController(IUserService userService) : ControllerBase
     public async Task<IActionResult> GetChats([FromRoute] string userId)
     {
         return (await _userService.GetUserChatsAsync(userId)).ToActionResult();
+    }
+
+    [HttpPatch("{userId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Patch([FromRoute] string userId, [FromQuery] PatchUserRequest request)
+    {
+        return (await _userService.PatchUserAsync(userId, request)).ToActionResult();
     }
 }

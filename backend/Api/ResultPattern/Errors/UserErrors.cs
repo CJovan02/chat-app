@@ -7,6 +7,9 @@ public static class UserErrors
     public static Error NotFoundUsername(string username) =>
         new(StatusCodes.NotFound, $"User with username: {username} not found");
 
+    public static Error PatchArgumentsNull() =>
+        new(StatusCodes.BadRequest, $"All Patch arguments are missing, please provide at least one");
+
     public static Error UsernameOccupied(string username) =>
         new(StatusCodes.BadRequest, $"Username {username} is already taken");
 

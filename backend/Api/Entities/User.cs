@@ -7,9 +7,9 @@ public class User : BaseEntity
 {
     [Indexed] public required string Username { get; init; }
 
-    [Indexed] public required string DisplayName { get; init; }
+    [Indexed] public required string DisplayName { get; set; }
 
-    public required int Age { get; init; }
+    public required int Age { get; set; }
 
     public string PasswordHash { get; init; }
 }
