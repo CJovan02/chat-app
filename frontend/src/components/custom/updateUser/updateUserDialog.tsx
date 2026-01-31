@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextInput from '@/components/custom/textInput';
+import { useUserStore } from '@/store/userStore';
 
 export const updateUserSchema = z.object({
   DisplayName: z.string().min(3, 'Display name must be at least 3 characters'),
@@ -25,11 +26,12 @@ export const updateUserSchema = z.object({
 
 export type UpdateUserFormValues = z.infer<typeof updateUserSchema>;
 
-type props = {
-  trigger: ReactNode;
+type Props = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 };
 
-const UpdateUserDialog = ({ trigger }: props) => {
+const UpdateUserDialog = ({ open, onOpenChange }: Props) => {
   const formMethods = useForm<UpdateUserFormValues>({
     resolver: zodResolver(updateUserSchema),
   });
@@ -38,13 +40,15 @@ const UpdateUserDialog = ({ trigger }: props) => {
     formState: { isSubmitting },
   } = formMethods;
 
+  const { user } = useUserStore();
+
   const onSubmit = async (data: UpdateUserFormValues) => {
     console.log(data);
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {/*<DialogTrigger asChild>{children}</DialogTrigger>*/}
 
       <DialogContent>
         <DialogHeader>
@@ -63,14 +67,14 @@ const UpdateUserDialog = ({ trigger }: props) => {
               <TextInput
                 id='DisplayName'
                 label='Display Name'
-                placeholder='Josh'
+                placeholder={user.displayName}
                 required
               />
               <TextInput
                 id='Age'
                 label='Age'
                 type='number'
-                placeholder='25'
+                placeholder={user.age.toString()}
                 required
               />
             </div>

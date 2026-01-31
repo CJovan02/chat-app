@@ -105,7 +105,6 @@ const Login = () => {
               </div>
             </CardHeader>
             <CardContent className='pt-2'>
-              <UpdateUserDialog trigger={<Button>update</Button>} />
               <FormProvider {...methods}>
                 <form
                   id='login-form'
