@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useUserStore } from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
+import UpdateUserDialog from '@/components/custom/updateUser/updateUserDialog';
 
 const chats = [
   {
@@ -218,14 +219,17 @@ const Dashboard = () => {
               ref={menuRef}
               role='menu'
               className='absolute bottom-16 left-4 w-52 rounded-lg border border-slate-800 bg-slate-900 p-2 shadow-xl'>
-              <button
-                type='button'
-                role='menuitem'
-                onClick={() => setMenuOpen(false)}
-                className='flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-slate-200 hover:bg-slate-800'>
-                <User className='size-4 text-slate-400' />
-                View profile
-              </button>
+              <UpdateUserDialog
+                trigger={
+                  <button
+                    type='button'
+                    role='menuitem'
+                    className='flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-slate-200 hover:bg-slate-800'>
+                    <User className='size-4 text-slate-400' />
+                    View profile
+                  </button>
+                }
+              />
               <button
                 type='button'
                 role='menuitem'
