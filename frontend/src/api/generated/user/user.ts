@@ -31,6 +31,8 @@ import type {
 
 import { axiosInstance } from '../../axiosInstance';
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 export type postUserResponse200 = {
   data: string;
   status: 200;
@@ -76,6 +78,7 @@ export const getPostUserMutationOptions = <
     { data: CreateUserRequest },
     TContext
   >;
+  request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof postUser>>,
   TError,
@@ -83,13 +86,13 @@ export const getPostUserMutationOptions = <
   TContext
 > => {
   const mutationKey = ['postUser'];
-  const { mutation: mutationOptions } = options
+  const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postUser>>,
@@ -97,7 +100,7 @@ export const getPostUserMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return postUser(data);
+    return postUser(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -117,6 +120,7 @@ export const usePostUser = <TError = ProblemDetails, TContext = unknown>(
       { data: CreateUserRequest },
       TContext
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
@@ -188,6 +192,7 @@ export const getPostUserLoginMutationOptions = <
     { data: LoginRequest },
     TContext
   >;
+  request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof postUserLogin>>,
   TError,
@@ -195,13 +200,13 @@ export const getPostUserLoginMutationOptions = <
   TContext
 > => {
   const mutationKey = ['postUserLogin'];
-  const { mutation: mutationOptions } = options
+  const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof postUserLogin>>,
@@ -209,7 +214,7 @@ export const getPostUserLoginMutationOptions = <
   > = (props) => {
     const { data } = props ?? {};
 
-    return postUserLogin(data);
+    return postUserLogin(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -229,6 +234,7 @@ export const usePostUserLogin = <TError = ProblemDetails, TContext = unknown>(
       { data: LoginRequest },
       TContext
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
@@ -284,16 +290,17 @@ export const getGetUserUserIdChatsQueryOptions = <
         TData
       >
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
 ) => {
-  const { query: queryOptions } = options ?? {};
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
   const queryKey =
     queryOptions?.queryKey ?? getGetUserUserIdChatsQueryKey(userId);
 
   const queryFn: QueryFunction<
     Awaited<ReturnType<typeof getUserUserIdChats>>
-  > = ({ signal }) => getUserUserIdChats(userId, { signal });
+  > = ({ signal }) => getUserUserIdChats(userId, { signal, ...requestOptions });
 
   return {
     queryKey,
@@ -333,6 +340,7 @@ export function useGetUserUserIdChats<
         >,
         'initialData'
       >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): DefinedUseQueryResult<TData, TError> & {
@@ -359,6 +367,7 @@ export function useGetUserUserIdChats<
         >,
         'initialData'
       >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -377,6 +386,7 @@ export function useGetUserUserIdChats<
         TData
       >
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -396,6 +406,7 @@ export function useGetUserUserIdChats<
         TData
       >
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseQueryResult<TData, TError> & {
@@ -464,6 +475,7 @@ export const getPatchUserUserIdMutationOptions = <
     { userId: string; params?: PatchUserUserIdParams },
     TContext
   >;
+  request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof patchUserUserId>>,
   TError,
@@ -471,13 +483,13 @@ export const getPatchUserUserIdMutationOptions = <
   TContext
 > => {
   const mutationKey = ['patchUserUserId'];
-  const { mutation: mutationOptions } = options
+  const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
+    : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof patchUserUserId>>,
@@ -485,7 +497,7 @@ export const getPatchUserUserIdMutationOptions = <
   > = (props) => {
     const { userId, params } = props ?? {};
 
-    return patchUserUserId(userId, params);
+    return patchUserUserId(userId, params, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
@@ -505,6 +517,7 @@ export const usePatchUserUserId = <TError = unknown, TContext = unknown>(
       { userId: string; params?: PatchUserUserIdParams },
       TContext
     >;
+    request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
