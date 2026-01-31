@@ -48,6 +48,7 @@ const TextInput = ({
                 maxLength={maxLength}
                 placeholder={placeholder}
                 {...fieldRest}
+                value={field.value ?? ''}
               />
               {hasError && (
                 <p className='text-sm text-red-600'>{fieldError?.message}</p>
