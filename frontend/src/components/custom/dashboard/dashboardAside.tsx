@@ -1,12 +1,11 @@
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MessageCircle, Search } from 'lucide-react';
 import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
 import { useUserStore } from '@/store/userStore';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 const chats = [
   {

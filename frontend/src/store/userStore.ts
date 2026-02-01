@@ -1,9 +1,6 @@
 import { create } from 'zustand';
 import { UserResponse } from '@/api/generated/model';
-import {
-  postUserLoginResponse,
-  postUserLoginResponseSuccess,
-} from '@/api/generated/user/user';
+import { postUserLoginResponseSuccess } from '@/api/generated/user/user';
 
 interface UserState {
   user: UserResponse | null;
