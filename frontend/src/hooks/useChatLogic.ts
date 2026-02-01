@@ -1,10 +1,8 @@
 import { useChatStore } from '@/store/chatStore';
 import { useCallback, useState } from 'react';
-import {
-  getUserUserIdChats,
-  useGetUserUserIdChats,
-} from '@/api/generated/user/user';
+import { getUserUserIdChats } from '@/api/generated/user/user';
 import { useUserStore } from '@/store/userStore';
+import { Chat } from '@/domain/models/chat';
 
 export enum ChatsState {
   init,
@@ -14,11 +12,11 @@ export enum ChatsState {
 }
 
 export const useChatLogic = () => {
+  const [state, setState] = useState<ChatsState>(ChatsState.init  );
   const { user } = useUserStore();
   const { setChats, setActiveChat: setActiveChatStore } = useChatStore();
   const chats = useChatStore((state) => state.chats);
   const activeChatId = useChatStore((state) => state.activeChatId);
-  const [state, setState] = useState<ChatsState>(ChatsState.init);
   const [error, setError] = useState<Error | null>(null);
 
   // fetches chats from backend and loads it in store
@@ -50,8 +48,33 @@ export const useChatLogic = () => {
   );
 
   const getActiveChat = useCallback(() => {
+    if (state != ChatsState.loaded) return;
+
     return chats[activeChatId];
   }, [chats, activeChatId]);
 
-  return { chats, activeChatId, setActiveChat, getActiveChat, fetchChats };
+  const isChatActive = useCallback(
+    (chatId: string) => {
+      if (state !== ChatsState.loaded) return;
+
+      return chatId === activeChatId;
+    },
+    [activeChatId],
+  );
+
+  return {
+    state,
+    chats,
+    activeChatId,
+    error,
+    setActiveChat,
+    getActiveChat,
+    fetchChats,
+    isChatActive,
+  };
 };
+
+// Util functions for chat logic. This could go into separate file
+export function getLastMessageFromChat(chat: Chat) {
+  return chat.messages[0];
+}

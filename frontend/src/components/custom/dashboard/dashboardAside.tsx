@@ -6,41 +6,27 @@ import { MessageCircle, Search } from 'lucide-react';
 import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
 import { useUserStore } from '@/store/userStore';
 import { useState } from 'react';
-
-const chats = [
-  {
-    id: 'design-squad',
-    name: 'Design Squad',
-    lastMessage: 'Can you review the dashboard layout?',
-    time: '2m',
-    unread: 2,
-  },
-  {
-    id: 'product-sync',
-    name: 'Product Sync',
-    lastMessage: 'Sprint goals are ready for review.',
-    time: '18m',
-    unread: 0,
-  },
-  {
-    id: 'frontend',
-    name: 'Frontend Guild',
-    lastMessage: 'New component library drops today.',
-    time: '1h',
-    unread: 3,
-  },
-  {
-    id: 'support',
-    name: 'Customer Support',
-    lastMessage: 'Ticket #4821 escalated.',
-    time: '3h',
-    unread: 0,
-  },
-];
+import { ChatsState, useChatLogic } from '@/hooks/useChatLogic';
+import { showError } from '@/toast';
+import { Spinner } from '@/components/ui/spinner';
+import DashboardChat from '@/components/custom/dashboard/dashboardChat';
 
 function DashboardAside() {
-  const [activeChatId, setActiveChatId] = useState(chats[0]?.id ?? '');
   const { user } = useUserStore();
+  const {
+    chats,
+    activeChatId,
+    getActiveChat,
+    fetchChats,
+    setActiveChat,
+    isChatActive,
+    state,
+    error,
+  } = useChatLogic();
+
+  if (state == ChatsState.error) {
+    showError('Error trying to load chats, please try again.');
+  }
 
   return (
     <aside className='flex h-full w-72 flex-col border-r border-primary/20'>
@@ -60,50 +46,36 @@ function DashboardAside() {
         </div>
       </div>
 
-      <div className='mt-4 flex-1 space-y-2 overflow-y-auto px-3 pb-6'>
-        {chats.map((chat) => (
+      {state == ChatsState.error && (
+        <div className='flex items-center flex-col justify-center h-full px-4'>
+          <p>Error trying to load chats, please try again.</p>
           <Button
-            key={chat.id}
-            variant={chat.id === activeChatId ? 'secondary' : 'ghost'}
-            className={cn('h-auto w-full justify-start gap-3 px-3 py-2')}
-            onClick={() => setActiveChatId(chat.id)}>
-            {/* Avatar */}
-            <Avatar className='size-10 bg'>
-              <AvatarFallback className='bg-primary/10 text-foreground'>
-                {chat.name
-                  .split(' ')
-                  .slice(0, 2)
-                  .map((part) => part[0])
-                  .join('')}
-              </AvatarFallback>
-            </Avatar>
-
-            {/* Chat meta */}
-            <div className='min-w-0 flex-1 text-left'>
-              <div className='flex items-center justify-between'>
-                <span className='truncate text-sm font-semibold'>
-                  {chat.name}
-                </span>
-                <span className='text-xs text-muted-foreground'>
-                  {chat.time}
-                </span>
-              </div>
-
-              <div className='flex items-center justify-between gap-2'>
-                <span className='truncate text-xs text-muted-foreground'>
-                  {chat.lastMessage}
-                </span>
-
-                {chat.unread > 0 && (
-                  <span className='rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground'>
-                    {chat.unread}
-                  </span>
-                )}
-              </div>
-            </div>
+            className='my-7 w-full font-bold text-md h-10'
+            variant='default'
+            onClick={fetchChats}>
+            Try Again
           </Button>
-        ))}
-      </div>
+        </div>
+      )}
+
+      {(state == ChatsState.loading || state == ChatsState.init) && (
+        <div className='flex flex-1 items-center justify-center h-full'>
+          <Spinner className='size-10 text-primary' />
+        </div>
+      )}
+
+      {state == ChatsState.loaded && (
+        <div className='mt-4 flex-1 space-y-2 overflow-y-auto px-3 pb-6'>
+          {Object.values(chats).map((chat) => (
+            <DashboardChat
+              key={chat.id}
+              chat={chat}
+              isActive={isChatActive(chat.id)}
+              onClick={() => setActiveChat(chat.id)}
+            />
+          ))}
+        </div>
+      )}
 
       <div className='border-t border-primary/20 px-4 py-4'>
         <div className='flex items-center justify-between gap-3'>

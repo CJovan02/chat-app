@@ -4,7 +4,7 @@ export type Message = {
   id: string;
   senderId: string;
   text: string;
-  sentAt: string;
+  sentAt: Date;
 };
 
 export function mapMessageResponseToMessage(mess: MessageResponse): Message {
@@ -12,12 +12,13 @@ export function mapMessageResponseToMessage(mess: MessageResponse): Message {
     id: mess.id,
     text: mess.text,
     senderId: mess.senderId,
-    sentAt: mess.sentAt,
+    sentAt: new Date(mess.sentAt),
   };
 }
 
 export function mapLastMessageToMessage(mess: ChatItemLastMessage): Message {
   return {
     ...mess,
+    sentAt: new Date(mess.sentAt),
   };
 }
