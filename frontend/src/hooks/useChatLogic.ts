@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useGetUserUserIdChats } from '@/api/generated/user/user';
 import { useUserStore } from '@/store/userStore';
 import { Chat } from '@/domain/models/chat';
+import { queryKeys } from '@/api/queryKeys';
 
 export const useChatLogic = () => {
   const { user } = useUserStore();
@@ -10,7 +11,9 @@ export const useChatLogic = () => {
   const chats = useChatStore((state) => state.chats);
   const activeChatId = useChatStore((state) => state.activeChatId);
 
-  const query = useGetUserUserIdChats(user.id);
+  const query = useGetUserUserIdChats(user.id, {
+    query: { queryKey: queryKeys.userChats(user.id) },
+  });
   const queryData = query.data?.data;
 
   const uiStates = {
