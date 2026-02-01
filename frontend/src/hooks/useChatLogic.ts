@@ -1,6 +1,9 @@
 import { useChatStore } from '@/store/chatStore';
 import { useCallback, useState } from 'react';
-import { getUserUserIdChats } from '@/api/generated/user/user';
+import {
+  getUserUserIdChats,
+  useGetUserUserIdChats,
+} from '@/api/generated/user/user';
 import { useUserStore } from '@/store/userStore';
 import { Chat } from '@/domain/models/chat';
 
@@ -12,7 +15,7 @@ export enum ChatsState {
 }
 
 export const useChatLogic = () => {
-  const [state, setState] = useState<ChatsState>(ChatsState.init  );
+  const [state, setState] = useState<ChatsState>(ChatsState.init);
   const { user } = useUserStore();
   const { setChats, setActiveChat: setActiveChatStore } = useChatStore();
   const chats = useChatStore((state) => state.chats);

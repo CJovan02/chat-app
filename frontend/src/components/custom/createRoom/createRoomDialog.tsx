@@ -14,7 +14,9 @@ type Props = {
 
 function CreateRoomDialog({ close, open, onOpenChange }: Props) {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create a private room with a friend.</DialogTitle>
@@ -24,5 +26,7 @@ function CreateRoomDialog({ close, open, onOpenChange }: Props) {
         </DialogHeader>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
+
+export default CreateRoomDialog;

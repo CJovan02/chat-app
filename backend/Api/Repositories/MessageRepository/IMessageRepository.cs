@@ -7,7 +7,7 @@ public interface IMessageRepository
     Task<string> SendMessage(Message message);
 
     /// <summary>
-    /// Returns Messages from provided chat, starting from the latest message and going to the newest.
+    /// Returns Messages from provided chat, starting from the latest message and going to the oldest.
     /// </summary>
     /// <param name="beforeId">
     /// If it's null, it starts from the latest message.

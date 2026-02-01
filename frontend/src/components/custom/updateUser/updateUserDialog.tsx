@@ -103,10 +103,12 @@ const UpdateUserDialog = ({ open, onOpenChange, close }: Props) => {
     }
   };
 
-  if (isError) {
-    showError('Profile update failed, please try again.');
-    reset();
-  }
+  useEffect(() => {
+    if (isError) {
+      showError('Profile update failed, please try again.');
+      reset();
+    }
+  }, [isError]);
 
   return (
     <Dialog
