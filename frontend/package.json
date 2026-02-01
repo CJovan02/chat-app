@@ -14,7 +14,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --ext .ts,.tsx .",
-    "api-generate": "orval --config ./orval.config.ts"
+    "api-generate": "orval --config ./orval.config.ts",
+    "format": "prettier --write ."
   },
   "keywords": [],
   "author": {

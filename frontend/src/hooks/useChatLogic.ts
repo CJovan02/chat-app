@@ -6,6 +6,7 @@ import {
 } from '@/api/generated/user/user';
 import { useUserStore } from '@/store/userStore';
 import { Chat } from '@/domain/models/chat';
+import { Message } from 'react-hook-form';
 
 export enum ChatsState {
   init,
@@ -24,7 +25,7 @@ export const useChatLogic = () => {
 
   // fetches chats from backend and loads it in store
   const fetchChats = useCallback(async () => {
-    if (state !== ChatsState.init && state !== ChatsState.error) return;
+    if (state === ChatsState.loading) return;
 
     setState(ChatsState.loading);
 
