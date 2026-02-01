@@ -12,65 +12,72 @@ import type {
   UseMutationResult,
 } from '@tanstack/react-query';
 
-import type { ProblemDetails, RoomRequest } from '.././model';
+import type { CreatePrivateRoomRequest, ProblemDetails } from '.././model';
 
 import { axiosInstance } from '../../axiosInstance';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
-export type postRoomResponse200 = {
+export type postRoomCreatePrivateResponse200 = {
   data: string;
   status: 200;
 };
 
-export type postRoomResponse400 = {
+export type postRoomCreatePrivateResponse400 = {
   data: ProblemDetails;
   status: 400;
 };
 
-export type postRoomResponseSuccess = postRoomResponse200 & {
-  headers: Headers;
-};
-export type postRoomResponseError = postRoomResponse400 & {
-  headers: Headers;
+export type postRoomCreatePrivateResponseSuccess =
+  postRoomCreatePrivateResponse200 & {
+    headers: Headers;
+  };
+export type postRoomCreatePrivateResponseError =
+  postRoomCreatePrivateResponse400 & {
+    headers: Headers;
+  };
+
+export type postRoomCreatePrivateResponse =
+  | postRoomCreatePrivateResponseSuccess
+  | postRoomCreatePrivateResponseError;
+
+export const getPostRoomCreatePrivateUrl = () => {
+  return `/Room/createPrivate`;
 };
 
-export type postRoomResponse = postRoomResponseSuccess | postRoomResponseError;
-
-export const getPostRoomUrl = () => {
-  return `/Room`;
-};
-
-export const postRoom = async (
-  roomRequest: RoomRequest,
+export const postRoomCreatePrivate = async (
+  createPrivateRoomRequest: CreatePrivateRoomRequest,
   options?: RequestInit,
-): Promise<postRoomResponse> => {
-  return axiosInstance<postRoomResponse>(getPostRoomUrl(), {
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(roomRequest),
-  });
+): Promise<postRoomCreatePrivateResponse> => {
+  return axiosInstance<postRoomCreatePrivateResponse>(
+    getPostRoomCreatePrivateUrl(),
+    {
+      ...options,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
+      body: JSON.stringify(createPrivateRoomRequest),
+    },
+  );
 };
 
-export const getPostRoomMutationOptions = <
+export const getPostRoomCreatePrivateMutationOptions = <
   TError = ProblemDetails,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postRoom>>,
+    Awaited<ReturnType<typeof postRoomCreatePrivate>>,
     TError,
-    { data: RoomRequest },
+    { data: CreatePrivateRoomRequest },
     TContext
   >;
   request?: SecondParameter<typeof axiosInstance>;
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postRoom>>,
+  Awaited<ReturnType<typeof postRoomCreatePrivate>>,
   TError,
-  { data: RoomRequest },
+  { data: CreatePrivateRoomRequest },
   TContext
 > => {
-  const mutationKey = ['postRoom'];
+  const mutationKey = ['postRoomCreatePrivate'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
       'mutationKey' in options.mutation &&
@@ -80,41 +87,47 @@ export const getPostRoomMutationOptions = <
     : { mutation: { mutationKey }, request: undefined };
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postRoom>>,
-    { data: RoomRequest }
+    Awaited<ReturnType<typeof postRoomCreatePrivate>>,
+    { data: CreatePrivateRoomRequest }
   > = (props) => {
     const { data } = props ?? {};
 
-    return postRoom(data, requestOptions);
+    return postRoomCreatePrivate(data, requestOptions);
   };
 
   return { mutationFn, ...mutationOptions };
 };
 
-export type PostRoomMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postRoom>>
+export type PostRoomCreatePrivateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postRoomCreatePrivate>>
 >;
-export type PostRoomMutationBody = RoomRequest;
-export type PostRoomMutationError = ProblemDetails;
+export type PostRoomCreatePrivateMutationBody = CreatePrivateRoomRequest;
+export type PostRoomCreatePrivateMutationError = ProblemDetails;
 
-export const usePostRoom = <TError = ProblemDetails, TContext = unknown>(
+export const usePostRoomCreatePrivate = <
+  TError = ProblemDetails,
+  TContext = unknown,
+>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postRoom>>,
+      Awaited<ReturnType<typeof postRoomCreatePrivate>>,
       TError,
-      { data: RoomRequest },
+      { data: CreatePrivateRoomRequest },
       TContext
     >;
     request?: SecondParameter<typeof axiosInstance>;
   },
   queryClient?: QueryClient,
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postRoom>>,
+  Awaited<ReturnType<typeof postRoomCreatePrivate>>,
   TError,
-  { data: RoomRequest },
+  { data: CreatePrivateRoomRequest },
   TContext
 > => {
-  return useMutation(getPostRoomMutationOptions(options), queryClient);
+  return useMutation(
+    getPostRoomCreatePrivateMutationOptions(options),
+    queryClient,
+  );
 };
 export type deleteRoomRoomIdResponse200 = {
   data: void;

@@ -7,6 +7,7 @@
 
 export * from './chatItemLastMessage';
 export * from './chatItemResponse';
+export * from './createPrivateRoomRequest';
 export * from './createUserRequest';
 export * from './getMessageParams';
 export * from './loginRequest';
@@ -14,5 +15,4 @@ export * from './messageRequest';
 export * from './messageResponse';
 export * from './patchUserUserIdParams';
 export * from './problemDetails';
-export * from './roomRequest';
 export * from './userResponse';

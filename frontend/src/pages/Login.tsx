@@ -21,6 +21,7 @@ import {
 import { showError, showInfo } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
 import { useUserStore } from '@/store/userStore';
+import { useEffect } from 'react';
 
 export const loginSchema = z.object({
   Username: z.string().min(3, 'Username must be at least 3 characters long.'),
@@ -77,10 +78,12 @@ const Login = () => {
     }
   };
 
-  if (isError) {
-    showError('Login failed. Please check your credentials and try again.');
-    reset();
-  }
+  useEffect(() => {
+    if (isError) {
+      showError('Login failed. Please check your credentials and try again.');
+      reset();
+    }
+  }, [isError, reset]);
 
   return (
     <div className='flex min-h-screen items-start justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-6 sm:items-center sm:px-6 sm:py-0'>

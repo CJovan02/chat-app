@@ -32,9 +32,11 @@ function DashboardAside() {
     loadChats();
   }, [fetchChats]);
 
-  if (state == ChatsState.error) {
-    showError('Error trying to load chats, please try again.');
-  }
+  useEffect(() => {
+    if (state == ChatsState.error) {
+      showError('Error trying to load chats, please try again.');
+    }
+  }, [state]);
 
   return (
     <aside className='flex h-full w-72 flex-col border-r border-primary/20'>

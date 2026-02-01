@@ -12,12 +12,12 @@ public class RoomController(IRoomService roomService) : ControllerBase
 {
     private readonly IRoomService _roomService = roomService;
 
-    [HttpPost]
+    [HttpPost("createPrivate")]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody] RoomRequest request)
+    public async Task<IActionResult> Create([FromBody] CreatePrivateRoomRequest request)
     {
-        return (await _roomService.CreateRoomAsync(request)).ToActionResult();
+        return (await _roomService.CreatePrivateRoomAsync(request)).ToActionResult();
     }
 
     [HttpDelete("{roomId}")]

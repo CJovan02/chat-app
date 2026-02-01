@@ -1,6 +1,7 @@
 using backend.Dto.Rooms;
 using backend.Dto.Rooms.Request;
 using backend.Dto.Rooms.Response;
+using backend.Entities;
 using backend.Repositories.RoomRepository;
 using backend.Repositories.UserRepository;
 using backend.Repositories.UserRoomRepository;
@@ -52,6 +53,31 @@ public class RoomService(
         {
             await _userRoomsRepository.AddRoomToUserAsync(participantId, roomId);
         }
+
+        return Result<string>.Success(roomId);
+    }
+
+    public async Task<Result<string>> CreatePrivateRoomAsync(CreatePrivateRoomRequest request)
+    {
+        // check if provided users exist
+        if (!(await _userRepository.UserExistsByIdAsync(request.UserId)))
+            return Result<string>.Failure(UserErrors.NotFoundId(request.UserId));
+
+        var otherUser = await _userRepository.GetUserByUsernameAsync(request.OtherUserUsername);
+        if (otherUser is null)
+            return Result<string>.Failure(UserErrors.NotFoundUsername(request.OtherUserUsername));
+
+        var participantIds = new List<string>();
+        participantIds.AddRange(request.UserId, otherUser.Id!);
+        var room = new Room
+        {
+            ParticipantIds = participantIds,
+        };
+        var roomId = await _roomRepository.CreateRoomAsync(room);
+
+        // Add this room for both users id
+        await _userRoomsRepository.AddRoomToUserAsync(request.UserId, roomId);
+        await _userRoomsRepository.AddRoomToUserAsync(otherUser.Id, roomId);
 
         return Result<string>.Success(roomId);
     }

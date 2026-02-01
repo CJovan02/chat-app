@@ -43,10 +43,18 @@ export type postUserResponse400 = {
   status: 400;
 };
 
+export type postUserResponse409 = {
+  data: ProblemDetails;
+  status: 409;
+};
+
 export type postUserResponseSuccess = postUserResponse200 & {
   headers: Headers;
 };
-export type postUserResponseError = postUserResponse400 & {
+export type postUserResponseError = (
+  | postUserResponse400
+  | postUserResponse409
+) & {
   headers: Headers;
 };
 
