@@ -1,79 +1,73 @@
 import { useChatStore } from '@/store/chatStore';
-import { useCallback, useState } from 'react';
-import {
-  getUserUserIdChats,
-  useGetUserUserIdChats,
-} from '@/api/generated/user/user';
+import { useCallback, useEffect, useState } from 'react';
+import { useGetUserUserIdChats } from '@/api/generated/user/user';
 import { useUserStore } from '@/store/userStore';
 import { Chat } from '@/domain/models/chat';
-import { Message } from 'react-hook-form';
-
-export enum ChatsState {
-  init,
-  loading,
-  loaded,
-  error,
-}
 
 export const useChatLogic = () => {
-  const [state, setState] = useState<ChatsState>(ChatsState.init);
   const { user } = useUserStore();
   const { setChats, setActiveChat: setActiveChatStore } = useChatStore();
   const chats = useChatStore((state) => state.chats);
   const activeChatId = useChatStore((state) => state.activeChatId);
-  const [error, setError] = useState<Error | null>(null);
 
-  // fetches chats from backend and loads it in store
-  const fetchChats = useCallback(async () => {
-    if (state === ChatsState.loading) return;
+  const query = useGetUserUserIdChats(user.id);
+  const queryData = query.data?.data;
 
-    setState(ChatsState.loading);
+  const uiStates = {
+    isError: query.isError,
+    isLoaded: query.isSuccess,
+    isLoading: query.isPending,
+    errorMessage: getErrorMessage(query.error),
+  };
 
-    try {
-      const response = await getUserUserIdChats(user.id);
-
-      setChats(response.data);
-
-      setState(ChatsState.loaded);
-    } catch (error) {
+  function getErrorMessage(error: any) {
+    if (error instanceof Error) {
       console.error(error);
-      setState(ChatsState.error);
-      setError(error as Error);
     }
-  }, [state, setChats, user.id]);
+    return 'Error trying to load your chats, please try again.';
+  }
+
+  useEffect(() => {
+    if (!queryData) return;
+
+    if (uiStates.isLoaded) {
+      setChats(query.data.data);
+    }
+  }, [queryData, setChats, uiStates.isLoaded]);
 
   const setActiveChat = useCallback(
     (chatId: string) => {
-      if (state !== ChatsState.loaded) return;
+      if (uiStates.isLoading) return;
 
       setActiveChatStore(chatId);
     },
-    [state, setActiveChatStore],
+    [setActiveChatStore, uiStates.isLoading],
   );
 
   const getActiveChat = useCallback(() => {
-    if (state != ChatsState.loaded) return;
+    if (!uiStates.isLoaded) return;
 
     return chats[activeChatId];
-  }, [chats, activeChatId]);
+  }, [chats, activeChatId, uiStates.isLoaded]);
 
   const isChatActive = useCallback(
     (chatId: string) => {
-      if (state !== ChatsState.loaded) return;
+      if (!uiStates.isLoaded) return;
 
       return chatId === activeChatId;
     },
-    [activeChatId],
+    [activeChatId, uiStates.isLoaded],
   );
 
+  const { refetch } = query;
+
   return {
-    state,
+    refetch,
     chats,
     activeChatId,
-    error,
+    ...uiStates,
     setActiveChat,
     getActiveChat,
-    fetchChats,
     isChatActive,
   };
 };
