@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import UpdateUserDialog from '@/components/custom/updateUser/updateUserDialog';
 import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
 import DashboardAside from '@/components/custom/dashboard/dashboardAside';
+import DashboardAsideSheet from '@/components/custom/dashboard/dashboardAsideSheet';
 
 const chats = [
   {
@@ -102,11 +103,18 @@ const Dashboard = () => {
   if (user === null) {
     return null;
   }
-
+  // bg-slate-950 text-slate-100
   return (
-    <div className='flex h-screen w-screen bg-slate-950 text-slate-100'>
+    <div className='flex h-screen w-screen'>
+      {/* Desktop sidebar */}
+      <div className='hidden md:block h-full'>
+        <DashboardAside />
+      </div>
 
-      <DashboardAside />
+      {/* Mobile trigger */}
+      <div className='md:hidden'>
+        <DashboardAsideSheet />
+      </div>
 
       <main className='flex flex-1 flex-col'>
         <header className='flex items-center justify-between border-b border-slate-800 px-6 py-4'>
