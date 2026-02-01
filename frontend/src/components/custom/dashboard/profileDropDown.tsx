@@ -37,7 +37,7 @@ function ProfileDropDown() {
             onSelect={() => {
               setProfileOpen(true);
             }}>
-            <UserIcon className='mr-2 size-4' />
+            <UserIcon className='size-4' />
             Profile
           </DropdownMenuItem>
           <DropdownMenuItem>
@@ -59,6 +59,7 @@ function ProfileDropDown() {
       <UpdateUserDialog
         open={profileOpen}
         onOpenChange={setProfileOpen}
+        close={() => setProfileOpen(false)}
       />
     </>
   );

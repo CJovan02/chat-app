@@ -82,7 +82,6 @@ const Dashboard = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
   const [activeChatId, setActiveChatId] = useState(chats[0]?.id ?? '');
-  //const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -98,37 +97,6 @@ const Dashboard = () => {
     () => chats.find((chat) => chat.id === activeChatId) ?? chats[0],
     [activeChatId],
   );
-
-  // useEffect(() => {
-  //   if (!menuOpen) {
-  //     return;
-  //   }
-  //
-  //   const handleClick = (event: MouseEvent) => {
-  //     const target = event.target as Node;
-  //     if (menuRef.current?.contains(target)) {
-  //       return;
-  //     }
-  //     if (menuButtonRef.current?.contains(target)) {
-  //       return;
-  //     }
-  //     setMenuOpen(false);
-  //   };
-  //
-  //   const handleKey = (event: KeyboardEvent) => {
-  //     if (event.key === 'Escape') {
-  //       setMenuOpen(false);
-  //     }
-  //   };
-  //
-  //   document.addEventListener('mousedown', handleClick);
-  //   document.addEventListener('keydown', handleKey);
-  //
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClick);
-  //     document.removeEventListener('keydown', handleKey);
-  //   };
-  // }, [menuOpen]);
 
   if (user === null) {
     return null;

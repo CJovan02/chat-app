@@ -22,7 +22,6 @@ import {
 } from '@/api/generated/model';
 import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
-import UpdateUserDialog from '@/components/custom/updateUser/updateUserDialog';
 import { useUserStore } from '@/store/userStore';
 
 export const loginSchema = z.object({
