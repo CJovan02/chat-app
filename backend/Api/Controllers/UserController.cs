@@ -45,4 +45,12 @@ public class UserController(IUserService userService) : ControllerBase
     {
         return (await _userService.PatchUserAsync(userId, request)).ToActionResult();
     }
+
+    [HttpGet("{userId}")]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUser([FromRoute] string userId)
+    {
+        return (await _userService.GetUserByIdAsync(userId)).ToActionResult();
+    }
 }

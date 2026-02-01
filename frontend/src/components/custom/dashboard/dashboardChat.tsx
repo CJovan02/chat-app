@@ -4,6 +4,7 @@ import { Chat } from '@/domain/models/chat';
 import { cn } from '@/lib/utils';
 import { getLastMessageFromChat } from '@/hooks/useChatLogic';
 import { formatMessageTime } from '@/utils/utils';
+import { useChatStore } from '@/store/chatStore';
 
 type Props = {
   chat: Chat;
@@ -29,17 +30,19 @@ function DashboardChat({ chat, isActive, onClick }: Props) {
       {/* Chat meta */}
       <div className='min-w-0 flex-1 text-left'>
         <div className='flex items-center justify-between'>
-          <span className='truncate text-sm font-semibold'>
-            {chat.name}
-          </span>
+          <span className='truncate text-sm font-semibold'>{chat.name}</span>
           <span className='text-xs text-muted-foreground'>
-            {formatMessageTime(lastMessage.sentAt)}
+            {lastMessage === undefined
+              ? ''
+              : formatMessageTime(lastMessage.sentAt)}
           </span>
         </div>
 
         <div className='flex items-center justify-between gap-2'>
           <span className='truncate text-xs text-muted-foreground'>
-            {lastMessage.text}
+            {lastMessage !== undefined
+              ? lastMessage.text
+              : `Start chatting with ${chat.name}`}
           </span>
 
           {/*{chat.unread > 0 && (*/}

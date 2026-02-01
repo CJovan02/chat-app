@@ -5,12 +5,9 @@
  * OpenAPI spec version: v1
  */
 
-export interface UserResponse {
+export interface RoomResponse {
   /** @minLength 1 */
   id: string;
-  /** @minLength 1 */
-  username: string;
-  /** @minLength 1 */
-  displayName: string;
-  age: number;
+  participantIds: string[];
+  createdAt: string;
 }

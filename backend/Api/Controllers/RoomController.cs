@@ -1,4 +1,5 @@
 using backend.Dto.Rooms.Request;
+using backend.Dto.Rooms.Response;
 using backend.ResultPattern;
 using backend.Services.RoomService;
 using Microsoft.AspNetCore.Mvc;
@@ -25,4 +26,13 @@ public class RoomController(IRoomService roomService) : ControllerBase
     // {
     //     return (await _roomService.DeleteRoomAsync(roomId)).ToActionResult();
     // }
+
+    [HttpGet("{roomId}")]
+    [ProducesResponseType(typeof(RoomResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetById(string roomId)
+    {
+        return (await _roomService.GetRoomByIdAsync(roomId)).ToActionResult();
+    }
 }
