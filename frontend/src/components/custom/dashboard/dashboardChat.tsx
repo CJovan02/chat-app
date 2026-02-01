@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Chat } from '@/domain/models/chat';
 import { cn } from '@/lib/utils';
 import { getLastMessageFromChat } from '@/hooks/useChatLogic';
+import { formatMessageTime } from '@/utils/utils';
 
 type Props = {
   chat: Chat;
@@ -32,7 +33,7 @@ function DashboardChat({ chat, isActive, onClick }: Props) {
             {chat.name}
           </span>
           <span className='text-xs text-muted-foreground'>
-            {lastMessage.sentAt.toLocaleTimeString()}
+            {formatMessageTime(lastMessage.sentAt)}
           </span>
         </div>
 

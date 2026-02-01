@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MessageCircle, Search } from 'lucide-react';
 import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
 import { useUserStore } from '@/store/userStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChatsState, useChatLogic } from '@/hooks/useChatLogic';
 import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
@@ -23,6 +23,14 @@ function DashboardAside() {
     state,
     error,
   } = useChatLogic();
+
+  useEffect(() => {
+    async function loadChats() {
+      await fetchChats();
+    }
+
+    loadChats();
+  }, [fetchChats]);
 
   if (state == ChatsState.error) {
     showError('Error trying to load chats, please try again.');
