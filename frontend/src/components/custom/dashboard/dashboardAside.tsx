@@ -24,7 +24,7 @@ function DashboardAside() {
     }
 
     loadChats();
-  }, [fetchChats]);
+  }, []);
 
   useEffect(() => {
     if (state == ChatsState.error) {
@@ -50,8 +50,7 @@ function DashboardAside() {
               variant='default'
               size='icon'
               className='ml-auto size-10'
-              onClick={() => setAddRoomOpen(true)}
-            >
+              onClick={() => setAddRoomOpen(true)}>
               <MessageCirclePlus className='size-4' />
             </Button>
           </div>

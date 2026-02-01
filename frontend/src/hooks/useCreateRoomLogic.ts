@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { usePostRoomCreatePrivate } from '@/api/generated/room/room';
 import { CreatePrivateRoomRequest } from '@/api/generated/model';
 import { useUserStore } from '@/store/userStore';
@@ -9,7 +9,6 @@ import { isAxiosError } from 'axios';
 
 function useCreateRoomLogic() {
   const { user } = useUserStore();
-  const [error, setError] = useState<Error | null>(null);
   const formSchema = z.object({
     username: z
       .string()
@@ -28,7 +27,7 @@ function useCreateRoomLogic() {
   const mutation = usePostRoomCreatePrivate();
 
   const uiState = {
-    isLoading: mutation.isPending,
+    isLoading: mutation.isPending || form.formState.isSubmitting,
     isError: mutation.isError,
     isSuccess: mutation.isSuccess,
     errorMessage: mapCreateRoomError(mutation.error),
@@ -61,3 +60,5 @@ function useCreateRoomLogic() {
 
   return { form, createRoom, ...uiState };
 }
+
+export default useCreateRoomLogic;
