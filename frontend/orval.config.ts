@@ -15,6 +15,7 @@ export default defineConfig({
         },
       },
     },
+
     input: {
       //   target: process.env.VITE_API_BASE_URL
       //     ? `${process.env.VITE_API_BASE_URL}swagger/v1/swagger.json`

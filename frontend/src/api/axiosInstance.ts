@@ -35,7 +35,7 @@ export const axiosInstance = async <T>(
     data: options?.body, // 🔥 body -> data (axios koristi data)
   });
 
-  return response.data as T;
+  return response as T;
 };
 
 export default instance;
