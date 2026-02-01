@@ -69,7 +69,6 @@ const UpdateUserDialog = ({ open, onOpenChange, close }: Props) => {
   }, [open, user, resetForm]);
 
   const onSubmit = async (data: UpdateUserFormValues) => {
-
     if (
       (data.Age === null || data.Age === undefined) &&
       (data.DisplayName === null || data.DisplayName === undefined)

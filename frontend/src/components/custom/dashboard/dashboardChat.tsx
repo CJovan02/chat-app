@@ -21,7 +21,7 @@ function DashboardChat({ chat, isActive, onClick }: Props) {
       className={cn('h-auto w-full justify-start gap-3 px-3 py-2')}>
       {/* Avatar */}
       <Avatar className='size-10 bg'>
-        <AvatarFallback className='bg-primary/10 text-foreground'>
+        <AvatarFallback className='bg-primary/10 text-foreground text-md'>
           {chat.name[0].toUpperCase()}
         </AvatarFallback>
       </Avatar>

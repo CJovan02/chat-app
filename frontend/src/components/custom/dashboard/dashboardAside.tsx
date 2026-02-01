@@ -1,8 +1,7 @@
-import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { MessageCircle, Search } from 'lucide-react';
+import { MessageCircle, MessageCirclePlus, Search } from 'lucide-react';
 import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
 import { useUserStore } from '@/store/userStore';
 import { useEffect, useState } from 'react';
@@ -10,19 +9,12 @@ import { ChatsState, useChatLogic } from '@/hooks/useChatLogic';
 import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
 import DashboardChat from '@/components/custom/dashboard/dashboardChat';
+import { Separator } from '@/components/ui/separator';
 
 function DashboardAside() {
   const { user } = useUserStore();
-  const {
-    chats,
-    activeChatId,
-    getActiveChat,
-    fetchChats,
-    setActiveChat,
-    isChatActive,
-    state,
-    error,
-  } = useChatLogic();
+  const { chats, fetchChats, setActiveChat, isChatActive, state } =
+    useChatLogic();
 
   useEffect(() => {
     async function loadChats() {
@@ -39,12 +31,18 @@ function DashboardAside() {
   }, [state]);
 
   return (
-    <aside className='flex h-full w-72 flex-col border-r border-primary/20'>
+    <aside className='flex h-full w-78 flex-col border-r border-primary/20'>
       {/* Header + Search */}
-      <div className='px-4 pt-5'>
-        <div className='flex items-center gap-2 text-sm font-semibold'>
-          <MessageCircle className='size-4 text-primary' />
+      <div className='px-4 pt-5 mb-5'>
+        <div className='flex items-center gap-3 text-xl font-semibold'>
+          <MessageCircle className='size-5 text-primary/40' />
           Recent Chats
+          <Button
+            variant='default'
+            size='icon'
+            className='ml-auto size-10'>
+            <MessageCirclePlus className='size-4' />
+          </Button>
         </div>
         <div className='mt-4 flex items-center gap-2 text-sm'>
           <Search className='size-4' />
@@ -55,6 +53,8 @@ function DashboardAside() {
           />
         </div>
       </div>
+
+      <Separator className='bg-primary/20' />
 
       {state == ChatsState.error && (
         <div className='flex items-center flex-col justify-center h-full px-4'>
@@ -75,7 +75,7 @@ function DashboardAside() {
       )}
 
       {state == ChatsState.loaded && (
-        <div className='mt-4 flex-1 space-y-2 overflow-y-auto px-3 pb-6'>
+        <div className='mt-5 flex-1 space-y-2 overflow-y-auto px-3 pb-6'>
           {Object.values(chats).map((chat) => (
             <DashboardChat
               key={chat.id}

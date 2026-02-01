@@ -88,6 +88,7 @@ public class RoomService(
         return Result.Success();
     }
 
+    // TODO delete room from user rooms and delete all messages from that room
     public async Task<Result> DeleteRoomAsync(string roomId)
     {
         // Redis ORM package accepts full object in order to delete it, that's why we need to pull it first

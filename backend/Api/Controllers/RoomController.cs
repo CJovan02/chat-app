@@ -1,5 +1,4 @@
 using backend.Dto.Rooms.Request;
-using backend.Dto.Rooms.Response;
 using backend.ResultPattern;
 using backend.Services.RoomService;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +19,10 @@ public class RoomController(IRoomService roomService) : ControllerBase
         return (await _roomService.CreatePrivateRoomAsync(request)).ToActionResult();
     }
 
-    [HttpDelete("{roomId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> Delete([FromRoute] string roomId)
-    {
-        return (await _roomService.DeleteRoomAsync(roomId)).ToActionResult();
-    }
+    // [HttpDelete("{roomId}")]
+    // [ProducesResponseType(StatusCodes.Status200OK)]
+    // public async Task<IActionResult> Delete([FromRoute] string roomId)
+    // {
+    //     return (await _roomService.DeleteRoomAsync(roomId)).ToActionResult();
+    // }
 }
