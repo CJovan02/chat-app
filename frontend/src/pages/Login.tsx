@@ -13,7 +13,6 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextInput from '@/components/custom/textInput';
 import {
-  postUserLoginResponse,
   usePostUserLogin,
 } from '@/api/generated/user/user';
 import {

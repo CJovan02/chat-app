@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import { useUserStore } from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
+import UpdateUserDialog from '@/components/custom/updateUser/updateUserDialog';
+import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
 
 const chats = [
   {
@@ -80,7 +82,6 @@ const Dashboard = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
   const [activeChatId, setActiveChatId] = useState(chats[0]?.id ?? '');
-  const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -96,37 +97,6 @@ const Dashboard = () => {
     () => chats.find((chat) => chat.id === activeChatId) ?? chats[0],
     [activeChatId],
   );
-
-  useEffect(() => {
-    if (!menuOpen) {
-      return;
-    }
-
-    const handleClick = (event: MouseEvent) => {
-      const target = event.target as Node;
-      if (menuRef.current?.contains(target)) {
-        return;
-      }
-      if (menuButtonRef.current?.contains(target)) {
-        return;
-      }
-      setMenuOpen(false);
-    };
-
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClick);
-    document.addEventListener('keydown', handleKey);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClick);
-      document.removeEventListener('keydown', handleKey);
-    };
-  }, [menuOpen]);
 
   if (user === null) {
     return null;
@@ -202,48 +172,8 @@ const Dashboard = () => {
                 <div className='text-xs text-slate-400'>@{user.username}</div>
               </div>
             </div>
-            <Button
-              ref={menuButtonRef}
-              variant='ghost'
-              size='icon-sm'
-              onClick={() => setMenuOpen((open) => !open)}
-              aria-haspopup='menu'
-              aria-expanded={menuOpen}
-              className='text-slate-300 hover:text-slate-100'>
-              <ChevronDown className='size-4' />
-            </Button>
+            <ProfileDropDown />
           </div>
-          {menuOpen && (
-            <div
-              ref={menuRef}
-              role='menu'
-              className='absolute bottom-16 left-4 w-52 rounded-lg border border-slate-800 bg-slate-900 p-2 shadow-xl'>
-              <button
-                type='button'
-                role='menuitem'
-                onClick={() => setMenuOpen(false)}
-                className='flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-slate-200 hover:bg-slate-800'>
-                <User className='size-4 text-slate-400' />
-                View profile
-              </button>
-              <button
-                type='button'
-                role='menuitem'
-                onClick={() => setMenuOpen(false)}
-                className='flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-slate-200 hover:bg-slate-800'>
-                <Settings className='size-4 text-slate-400' />
-                Settings
-              </button>
-              <button
-                type='button'
-                role='menuitem'
-                onClick={() => setMenuOpen(false)}
-                className='flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-300 hover:bg-slate-800'>
-                <LogOut className='size-4 text-red-300' />
-                Sign out
-              </button>
-            </div>
-          )}
         </div>
       </aside>
 
