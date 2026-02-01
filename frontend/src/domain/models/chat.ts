@@ -15,7 +15,7 @@ export function mapChatItemResponseToChat(item: ChatItemResponse): Chat {
     otherUserId: item.otherUserId,
     name: item.otherUserDisplayName,
     messages:
-      item.lastMessage === undefined
+      item.lastMessage === undefined || item.lastMessage === null
         ? []
         : [mapLastMessageToMessage(item.lastMessage)],
     fetched: false,
