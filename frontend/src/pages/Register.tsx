@@ -11,17 +11,18 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
-import { showError } from '@/toast';
+import { showError, showSuccess } from '@/toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import z from 'zod';
+import { isAxiosError } from 'axios';
 
 export const registerSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters long.'),
   displayName: z
     .string()
-    .min(5, 'Display name must be at least 5 characters long.'),
+    .min(3, 'Display name must be at least 3 characters long.'),
   age: z.number().min(16, 'You must be at least 16 years old to register.'),
   password: z.string().min(5, 'Password must be at least 5 characters long.'),
 });
@@ -38,7 +39,7 @@ const Register = () => {
     formState: { isSubmitting },
   } = methods;
 
-  const { mutateAsync, isPending, isError } = usePostUser();
+  const { mutateAsync, isPending, isError, reset } = usePostUser();
 
   const navigateToLogin = () => navigate('/login');
 
@@ -50,86 +51,92 @@ const Register = () => {
       password: data.password,
     };
     try {
-      await mutateAsync({ data: request });
+      const result = await mutateAsync({ data: request });
+      showSuccess(
+        'Successfully registered! You may now log in with your new account.',
+      );
       navigateToLogin();
+      reset();
     } catch (error) {
-      showError('Something went wrong');
+      if (isAxiosError(error) && error.response.status === 409) {
+        showError('Username is already taken.');
+      } else {
+        showError('Something went wrong.');
+      }
+      reset();
     }
   };
 
   return (
     <div className='flex min-h-screen items-start justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-6 sm:items-center sm:px-6 sm:py-0'>
       <div className='w-full max-w-sm'>
-        {isPending || isSubmitting ? (
-          <Spinner />
-        ) : (
-          <Card className='border-0 shadow-2xl'>
-            <CardHeader className='gap-1'>
-              <CardTitle className='text-xl font-bold sm:text-2xl'>
-                Create an account
-              </CardTitle>
-              <CardDescription className='text-sm sm:text-base'>
-                Enter your information below to create your account
-              </CardDescription>
-              <div>
-                <Button
-                  variant='link'
-                  className='p-0 w-full justify-start'
-                  onClick={navigateToLogin}>
-                  <span className='block leading-tight'>
-                    Already have an account?
-                  </span>
-                  <span className='block leading-tight'>Login</span>
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className='pt-2'>
-              <FormProvider {...methods}>
-                <form
-                  id='register-form'
-                  className='space-y-4'
-                  onSubmit={handleSubmit(onSubmit)}>
-                  <div className='flex flex-col gap-4'>
-                    <TextInput
-                      id='username'
-                      label='Username'
-                      placeholder='joca'
-                      required
-                    />
-                    <TextInput
-                      id='displayName'
-                      label='Display Name'
-                      placeholder='Jovan Cvektović'
-                      required
-                    />
-                    <TextInput
-                      id='age'
-                      type='number'
-                      label='Age'
-                      placeholder='18'
-                      required
-                    />
-                    <TextInput
-                      id='password'
-                      type='password'
-                      label='Password'
-                      placeholder='********'
-                      required
-                    />
-                  </div>
-                </form>
-              </FormProvider>
-            </CardContent>
-            <CardFooter className='flex-col gap-3 pt-4'>
+        <Card className='border-0 shadow-2xl'>
+          <CardHeader className='gap-1'>
+            <CardTitle className='text-xl font-bold sm:text-2xl'>
+              Create an account
+            </CardTitle>
+            <CardDescription className='text-sm sm:text-base'>
+              Enter your information below to create your account
+            </CardDescription>
+            <div>
               <Button
-                type='submit'
-                form='register-form'
-                className='w-full h-10 font-semibold'>
-                Register
+                variant='link'
+                className='p-0 w-full justify-start'
+                onClick={navigateToLogin}>
+                <span className='block leading-tight'>
+                  Already have an account?
+                </span>
+                <span className='block leading-tight'>Login</span>
               </Button>
-            </CardFooter>
-          </Card>
-        )}
+            </div>
+          </CardHeader>
+          <CardContent className='pt-2'>
+            <FormProvider {...methods}>
+              <form
+                id='register-form'
+                className='space-y-4'
+                onSubmit={handleSubmit(onSubmit)}>
+                <div className='flex flex-col gap-4'>
+                  <TextInput
+                    id='username'
+                    label='Username'
+                    placeholder='john'
+                    required
+                  />
+                  <TextInput
+                    id='displayName'
+                    label='Display Name'
+                    placeholder='John Wick'
+                    required
+                  />
+                  <TextInput
+                    id='age'
+                    type='number'
+                    label='Age'
+                    placeholder='18'
+                    required
+                  />
+                  <TextInput
+                    id='password'
+                    type='password'
+                    label='Password'
+                    placeholder='********'
+                    required
+                  />
+                </div>
+              </form>
+            </FormProvider>
+          </CardContent>
+          <CardFooter className='flex-col gap-3 pt-4'>
+            <Button
+              type='submit'
+              form='register-form'
+              className='w-full h-10 font-semibold'
+              disabled={isSubmitting || isPending}>
+              {isPending || isSubmitting ? <Spinner /> : 'Register'}
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );

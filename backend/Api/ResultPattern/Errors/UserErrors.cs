@@ -11,7 +11,7 @@ public static class UserErrors
         new(StatusCodes.BadRequest, $"All Patch arguments are missing, please provide at least one");
 
     public static Error UsernameOccupied(string username) =>
-        new(StatusCodes.BadRequest, $"Username {username} is already taken");
+        new(StatusCodes.Conflict, $"Username {username} is already taken");
 
     public static Error WrongPassword() =>
         new(StatusCodes.Unauthorized, "Wrong password");

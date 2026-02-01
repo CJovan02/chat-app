@@ -2,6 +2,7 @@ using backend.Dto.Users.Request;
 using backend.Dto.Users.Response;
 using backend.ResultPattern;
 using backend.Services.UserService;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace backend.Controllers;
@@ -15,6 +16,7 @@ public class UserController(IUserService userService) : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
     {
         return (await _userService.CreateUserAsync(request)).ToActionResult();
