@@ -4,6 +4,7 @@ import { Chat } from '@/domain/models/chat';
 import { cn } from '@/lib/utils';
 import { getLastMessageFromChat } from '@/hooks/useChatLogic';
 import { formatMessageTime } from '@/utils/utils';
+import { useChatStore } from '@/store/chatStore';
 
 type Props = {
   chat: Chat;
