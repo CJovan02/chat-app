@@ -1,35 +1,23 @@
-import * as signalR from '@microsoft/signalr';
-import { HubConnection } from '@microsoft/signalr';
+import { Callback, SignalRService } from '@/signalr/signalRService';
+import { MessageRequest } from '@/api/generated/model';
 
-let connection: HubConnection | null = null;
+//const apiUrl = `${import.meta.env.VITE_API_BASE_URL ?? ''}/notificationHub`;
+const apiUrl = 'http://localhost:5181/notificationHub';
 
-const apiUrl = `${import.meta.env.VITE_API_BASE_URL ?? ''}/notificationHub`;
-
-export async function startConnection() {
-  if (connection) {
-    return;
+class MessageNotificationsHub extends SignalRService {
+  constructor() {
+    super(apiUrl);
   }
 
-  connection = new signalR.HubConnectionBuilder()
-    .withUrl(apiUrl, { withCredentials: false })
-    .withAutomaticReconnect()
-    .build();
-
-  try {
-    await connection.start();
-    console.log('SignalR connection started');
-  } catch (error) {
-    console.error('Error starting SignalR connection:', error);
-    setTimeout(() => startConnection(), 5000);
+  onReceiveMessage(callback: Callback) {
+    this.on('ReceiveMessage', callback);
   }
-  return connection;
-}
 
-export function stopConnection() {
-  if (connection) {
-    connection.stop().then(() => {
-      console.log('SignalR connection stopped');
-      connection = null;
-    });
+  joinRoom(roomId: string) {
+    return this.invoke('JoinRoom', roomId);
+  }
+
+  sendMessage(request: MessageRequest) {
+    return this.invoke('SendMessage', JSON.stringify(request));
   }
 }
