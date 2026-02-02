@@ -1,10 +1,14 @@
 import { cn } from '@/lib/utils';
-import useChatLogic from '@/hooks/useChatLogic';
+import useChatLogic, { UseChatLogicReturn } from '@/hooks/useChatLogic';
 import { Spinner } from '@/components/ui/spinner';
 import { useEffect } from 'react';
 import { showError } from '@/toast';
 
-function ChatMessages() {
+type Props = {
+  logic: UseChatLogicReturn;
+};
+
+function ChatMessages({ logic }: Props) {
   const {
     messages,
     isMe,
@@ -13,7 +17,7 @@ function ChatMessages() {
     isLoaded,
     isError,
     errorMessage,
-  } = useChatLogic();
+  } = logic;
 
   if (!activeChat) {
     return null;

@@ -43,12 +43,10 @@ const App = () => {
 
 const root = createRoot(document.getElementById('app')!);
 root.render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-      <ToastContainer />
-    </QueryClientProvider>
-  </StrictMode>,
+  <QueryClientProvider client={queryClient}>
+    <App />
+    <ToastContainer />
+  </QueryClientProvider>,
 );
 
 export default App;

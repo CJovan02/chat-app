@@ -5,14 +5,27 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace backend.Hubs;
 
-public class ChatHub(IMessageService messageService, IValidator<MessageRequest> messageReqValidator) : Hub
+public class ChatHub(
+    IMessageService messageService,
+    IValidator<MessageRequest> messageReqValidator,
+    ILogger<ChatHub> logger) : Hub
 {
     private readonly IMessageService _messageService = messageService;
     private readonly IValidator<MessageRequest> _messageReqValidator = messageReqValidator;
+    private readonly ILogger<ChatHub> _logger = logger;
 
     public async Task JoinRoom(string roomId)
     {
-        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+        try
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+            _logger.LogInformation("Joined room {roomId}", roomId);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error while joining room {roomId}", roomId);
+            throw;
+        }
     }
 
     public async Task SendMessage(MessageRequest request)
@@ -29,5 +42,6 @@ public class ChatHub(IMessageService messageService, IValidator<MessageRequest> 
 
         // Broadcast to everyone inside group
         await Clients.Group(request.RoomId).SendAsync("ReceiveMessage", response);
+        _logger.LogInformation("Message sent");
     }
 }

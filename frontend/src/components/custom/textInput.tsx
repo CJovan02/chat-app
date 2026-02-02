@@ -9,13 +9,14 @@ import {
 
 interface TextInputProps {
   id: string;
-  label: string;
+  label?: string;
   description?: string;
   placeholder?: string;
   type?: string;
   required?: boolean;
   disabled?: boolean;
   maxLength?: number;
+  inputClassName?: string;
 }
 
 const TextInput = ({
@@ -27,6 +28,7 @@ const TextInput = ({
   maxLength,
   type,
   description,
+  inputClassName
 }: TextInputProps) => {
   const { control } = useFormContext();
   return (
@@ -37,7 +39,7 @@ const TextInput = ({
         const { ref, ...fieldRest } = field;
         return (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+            {label && <FieldLabel htmlFor={field.name}>{label}</FieldLabel>}
             <Input
               id={id}
               required={required}
@@ -54,6 +56,7 @@ const TextInput = ({
                 field.onChange(type === 'number' ? Number(value) : value);
               }}
               type={type || 'text'}
+              className={inputClassName}
             />
             {description !== undefined && (
               <FieldDescription>{description}</FieldDescription>
