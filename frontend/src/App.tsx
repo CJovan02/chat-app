@@ -6,10 +6,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import { ToastContainer } from 'react-toastify';
+import { useApplyTheme } from './hooks/useApplyTheme';
 
 const queryClient = new QueryClient();
 
 const App = () => {
+  useApplyTheme();
   return (
     <HashRouter>
       <Routes>

@@ -41,7 +41,9 @@ function useChatLogic() {
 
     const messageResponses = queryData as MessageResponse[];
 
-    const messages = messageResponses.map(mapMessageResponseToMessage).reverse();
+    const messages = messageResponses
+      .map(mapMessageResponseToMessage)
+      .reverse();
 
     addMessages(activeChatId, messages);
   }, [isLoaded, queryData, activeChatId]);

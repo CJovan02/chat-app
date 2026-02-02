@@ -37,7 +37,7 @@ function ChatMessages() {
         </div>
       )}
 
-      {(isLoaded && messages.length > 0) && (
+      {isLoaded && messages.length > 0 && (
         <div className='space-y-4'>
           {messages.map((message) => {
             const localTime = new Date(message.sentAt).toLocaleTimeString([], {
