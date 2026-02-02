@@ -5,7 +5,7 @@ import { MessageCircle, MessageCirclePlus, Search } from 'lucide-react';
 import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
 import { useUserStore } from '@/store/userStore';
 import { useEffect, useState } from 'react';
-import { ChatsState, useChatLogic } from '@/hooks/useChatLogic';
+import { useRoomsLogic } from '@/hooks/useRoomsLogic';
 import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
 import DashboardChat from '@/components/custom/dashboard/dashboardChat';
@@ -15,22 +15,22 @@ import CreateRoomDialog from '@/components/custom/createRoom/createRoomDialog';
 function DashboardAside() {
   const { user } = useUserStore();
   const [addRoomOpen, setAddRoomOpen] = useState(false);
-  const { chats, fetchChats, setActiveChat, isChatActive, state } =
-    useChatLogic();
+  const {
+    chats,
+    isError,
+    isLoading,
+    isLoaded,
+    refetch,
+    errorMessage,
+    setActiveChat,
+    isChatActive,
+  } = useRoomsLogic();
 
   useEffect(() => {
-    async function loadChats() {
-      await fetchChats();
+    if (isError) {
+      showError(errorMessage);
     }
-
-    loadChats();
-  }, []);
-
-  useEffect(() => {
-    if (state == ChatsState.error) {
-      showError('Error trying to load chats, please try again.');
-    }
-  }, [state]);
+  }, [isError, errorMessage]);
 
   return (
     <>
@@ -66,25 +66,25 @@ function DashboardAside() {
 
         <Separator className='bg-primary/20' />
 
-        {state == ChatsState.error && (
+        {isError && (
           <div className='flex items-center flex-col justify-center h-full px-4'>
             <p>Error trying to load chats, please try again.</p>
             <Button
               className='my-7 w-full font-bold text-md h-10'
               variant='default'
-              onClick={fetchChats}>
+              onClick={() => refetch()}>
               Try Again
             </Button>
           </div>
         )}
 
-        {(state == ChatsState.loading || state == ChatsState.init) && (
+        {isLoading && (
           <div className='flex flex-1 items-center justify-center h-full'>
             <Spinner className='size-10 text-primary' />
           </div>
         )}
 
-        {state == ChatsState.loaded && (
+        {isLoaded && (
           <div className='mt-5 flex-1 space-y-2 overflow-y-auto px-3 pb-6'>
             {Object.values(chats).map((chat) => (
               <DashboardChat

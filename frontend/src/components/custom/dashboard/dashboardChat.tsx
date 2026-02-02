@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Chat } from '@/domain/models/chat';
 import { cn } from '@/lib/utils';
-import { getLastMessageFromChat } from '@/hooks/useChatLogic';
+import { getLastMessageFromChat } from '@/hooks/useRoomsLogic';
 import { formatMessageTime } from '@/utils/utils';
 import { useChatStore } from '@/store/chatStore';
 

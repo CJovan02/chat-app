@@ -1,84 +1,72 @@
-import { useChatStore } from '@/store/chatStore';
-import { useCallback, useState } from 'react';
-import {
-  getUserUserIdChats,
-  useGetUserUserIdChats,
-} from '@/api/generated/user/user';
 import { useUserStore } from '@/store/userStore';
-import { Chat } from '@/domain/models/chat';
-import { Message } from 'react-hook-form';
+import { useChatStore } from '@/store/chatStore';
+import { useEffect, useMemo } from 'react';
+import { useGetMessage } from '@/api/generated/message/message';
+import { MessageResponse, ProblemDetails } from '@/api/generated/model';
+import { mapMessageResponseToMessage } from '@/domain/models/message';
 
-export enum ChatsState {
-  init,
-  loading,
-  loaded,
-  error,
-}
-
-export const useChatLogic = () => {
-  const [state, setState] = useState<ChatsState>(ChatsState.init);
+function useChatLogic() {
   const { user } = useUserStore();
-  const { setChats, setActiveChat: setActiveChatStore } = useChatStore();
-  const chats = useChatStore((state) => state.chats);
   const activeChatId = useChatStore((state) => state.activeChatId);
-  const [error, setError] = useState<Error | null>(null);
+  const addMessages = useChatStore((state) => state.addMessages);
+  const messages = useChatStore((state) => {
+    if (!state.activeChatId) return [];
 
-  // fetches chats from backend and loads it in store
-  const fetchChats = useCallback(async () => {
-    if (state === ChatsState.loading) return;
-
-    setState(ChatsState.loading);
-
-    try {
-      const response = await getUserUserIdChats(user.id);
-
-      setChats(response.data);
-
-      setState(ChatsState.loaded);
-    } catch (error) {
-      console.error(error);
-      setState(ChatsState.error);
-      setError(error as Error);
-    }
-  }, [state, setChats, user.id]);
-
-  const setActiveChat = useCallback(
-    (chatId: string) => {
-      if (state !== ChatsState.loaded) return;
-
-      setActiveChatStore(chatId);
-    },
-    [state, setActiveChatStore],
+    return state.chats[state.activeChatId]?.messages ?? [];
+  });
+  const activeChat = useChatStore((state) =>
+    state.activeChatId ? state.chats[state.activeChatId] : null,
   );
 
-  const getActiveChat = useCallback(() => {
-    if (state != ChatsState.loaded) return;
-
-    return chats[activeChatId];
-  }, [chats, activeChatId]);
-
-  const isChatActive = useCallback(
-    (chatId: string) => {
-      if (state !== ChatsState.loaded) return;
-
-      return chatId === activeChatId;
+  const {
+    data,
+    isPending: isLoading,
+    isError,
+    error,
+    isSuccess: isLoaded,
+  } = useGetMessage(
+    {
+      PageSize: 10,
+      RoomId: activeChatId,
     },
-    [activeChatId],
+    {
+      query: { enabled: !!activeChatId },
+    },
   );
+
+  const queryData = data?.data;
+
+  useEffect(() => {
+    if (!isLoaded || !queryData || !activeChatId) return;
+
+    const messageResponses = queryData as MessageResponse[];
+
+    const messages = messageResponses.map(mapMessageResponseToMessage).reverse();
+
+    addMessages(activeChatId, messages);
+  }, [isLoaded, queryData, activeChatId]);
+
+  const isMe = (userId: string) => {
+    if (!user) return false;
+    return userId === user.id;
+  };
+
+  function getErrorMessage(error: ProblemDetails) {
+    console.error(error);
+    return 'Error trying to load messages.';
+  }
 
   return {
-    state,
-    chats,
-    activeChatId,
-    error,
-    setActiveChat,
-    getActiveChat,
-    fetchChats,
-    isChatActive,
+    messages,
+    user,
+    isMe,
+    activeChat,
+    isLoading,
+    isLoaded,
+    isError,
+    isChatSelected: activeChatId === null,
+    errorMessage: isError ? getErrorMessage(error) : null,
   };
-};
-
-// Util functions for chat logic. This could go into separate file
-export function getLastMessageFromChat(chat: Chat) {
-  return chat.messages[0];
 }
+
+export default useChatLogic;
