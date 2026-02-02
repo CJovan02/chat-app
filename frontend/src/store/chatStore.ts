@@ -10,7 +10,7 @@ type ChatStore = {
 
   setChats: (chats: ChatItemResponse[]) => void;
   setActiveChat: (id: string) => void;
-  addMessage: (chatId: string, message: Message) => void;
+  addMessage: (message: Message) => void;
   addMessages: (chatId: string, messages: Message[]) => void;
   setChatFetched: (chatId: string) => void;
 };
@@ -39,13 +39,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       },
     })),
 
-  addMessage: (chatId, message) =>
+  addMessage: (message) =>
     set((state) => ({
       chats: {
         ...state.chats,
-        [chatId]: {
-          ...state.chats[chatId],
-          messages: [...state.chats[chatId].messages, message],
+        [state.activeChatId]: {
+          ...state.chats[state.activeChatId],
+          messages: [...state.chats[state.activeChatId].messages, message],
         },
       },
     })),

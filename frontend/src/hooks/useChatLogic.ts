@@ -1,6 +1,6 @@
 import { useUserStore } from '@/store/userStore';
 import { useChatStore } from '@/store/chatStore';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useGetMessage } from '@/api/generated/message/message';
 import {
   MessageRequest,
@@ -78,17 +78,21 @@ function useChatLogic(): UseChatLogicReturn {
     configure();
   }, []);
 
-  const handleReceivedMessage = (data) => {
-    if (!activeChatId) return;
+  const handleReceivedMessage = useCallback(
+    (data: any) => {
+      if (!activeChatId) return;
 
-    if (data.isFailiure) console.error('Error sending message', data.error);
+      if (data.isFailiure) console.error('Error sending message', data.error);
+      if (!data.isSuccess) console.error('Unknown error');
 
-    if (!data.isSuccess) console.error('Unknown error');
-
-    const message = mapMessageResponseToMessage(data.value as MessageResponse);
-    addMessage(activeChatId, message);
-    form.reset()
-  };
+      const message = mapMessageResponseToMessage(
+        data.value as MessageResponse,
+      );
+      addMessage(message);
+      form.reset();
+    },
+    [activeChatId, addMessage, form],
+  );
 
   async function sendMessageToCurrentChat(data: FormValues) {
     if (!activeChatId || !user) return;
