@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 import { useEffect } from 'react';
-import { showError } from '@/toast';
+import { showError, showSuccess } from '@/toast';
 
 type Props = {
   open: boolean;
@@ -29,7 +29,14 @@ function CreateRoomDialog({ close, open, onOpenChange }: Props) {
 
   useEffect(() => {
     if (isError) showError(errorMessage);
-  }, [isError]);
+
+    if (isSuccess) {
+      showSuccess(
+        'Successfully created room, you can now start chatting with your new friend.',
+      );
+      close();
+    }
+  }, [isError, isSuccess]);
 
   return (
     <Dialog

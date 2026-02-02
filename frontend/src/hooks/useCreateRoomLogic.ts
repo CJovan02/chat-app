@@ -6,6 +6,8 @@ import { usePostRoomCreatePrivate } from '@/api/generated/room/room';
 import { CreatePrivateRoomRequest } from '@/api/generated/model';
 import { useUserStore } from '@/store/userStore';
 import { isAxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
+import { queryKeys } from '@/api/queryKeys';
 
 function useCreateRoomLogic() {
   const { user } = useUserStore();
@@ -23,6 +25,8 @@ function useCreateRoomLogic() {
       username: '',
     },
   });
+
+  const queryClient = useQueryClient();
 
   const mutation = usePostRoomCreatePrivate();
 
@@ -45,12 +49,26 @@ function useCreateRoomLogic() {
 
   const createRoom = useCallback(
     async (data: FormValues) => {
+      if (data.username === user.username) {
+        form.setError('username', {
+          type: 'validate',
+          message: "You can't create a chat with yourself, dumbass.",
+        });
+        return;
+      }
+
       try {
         const request: CreatePrivateRoomRequest = {
           userId: user.id,
           otherUserUsername: data.username,
         };
         await mutation.mutateAsync({ data: request });
+
+        // force reload rooms query in order to pull that new chat
+        // needs to change in future because that will delete all messages from chats :))
+        await queryClient.invalidateQueries({
+          queryKey: queryKeys.userChats(user.id),
+        });
       } catch (error) {
         console.error(error);
       }
