@@ -7,17 +7,15 @@ import { useUserStore } from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
 import DashboardAside from '@/components/custom/dashboard/dashboardAside';
 import DashboardAsideSheet from '@/components/custom/dashboard/dashboardAsideSheet';
-import { useChatStore } from '@/store/chatStore';
 import { useGetMessage } from '@/api/generated/message/message';
-import { useGetRoomRoomId } from '@/api/generated/room/room';
-import { useGetUserUserId } from '@/api/generated/user/user';
 import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
+import { useChatLogic } from '@/hooks/useChatLogic';
 
 const Dashboard = () => {
   const { user } = useUserStore();
   const navigate = useNavigate();
-  const { activeChatId } = useChatStore();
+  const { activeChatId, fetchChats, chats } = useChatLogic();
 
   useEffect(() => {
     if (user === null) {
@@ -34,28 +32,12 @@ const Dashboard = () => {
     RoomId: activeChatId,
   });
 
-  const {
-    data: roomData,
-    isFetching: isRoomLoading,
-    isError: isRoomError,
-  } = useGetRoomRoomId(activeChatId || '');
-  const participantIds = roomData?.data.participantIds || [];
-  const participantId = (participantIds as string[]).find(
-    (id) => id !== user?.id,
-  );
-
-  const {
-    data: participantData,
-    isLoading: isUserLoading,
-    isError: isUserError,
-  } = useGetUserUserId(participantId);
-  const participant = participantData?.data;
+  fetchChats();
+  const chat = activeChatId ? chats[activeChatId] : null;
 
   useEffect(() => {
     if (isChatError) showError('Failed to load messages');
-    if (isRoomError) showError('Failed to load room info');
-    if (isUserError) showError('Failed to load participant info');
-  }, [isChatError, isRoomError, isUserError]);
+  }, [isChatError]);
 
   const navigateToLogin = () => navigate('/login');
 
@@ -66,7 +48,7 @@ const Dashboard = () => {
 
   const isMe = useCallback((userId: string) => userId === user?.id, [user?.id]);
 
-  const isLoading = isChatLoading || isRoomLoading || isUserLoading;
+  const isLoading = isChatLoading;
 
   if (user === null) {
     return null;
@@ -85,7 +67,7 @@ const Dashboard = () => {
         <DashboardAsideSheet />
       </div>
 
-      {activeChatId === null ? (
+      {activeChatId === null || !chat ? (
         <></>
       ) : isLoading ? (
         <Spinner className='m-auto size-10 text-primary' />
@@ -94,7 +76,7 @@ const Dashboard = () => {
           <header className='flex items-center justify-between border-b border-slate-800 px-6 py-4'>
             <div>
               <div className='text-lg font-semibold'>
-                {participant.displayName.toString() ?? 'Chat'}
+                {chat.otherUserDisplayName ?? 'Chat'}
               </div>
             </div>
             <div className='flex items-center gap-2 text-xs text-slate-400'>
@@ -123,7 +105,7 @@ const Dashboard = () => {
                     )}>
                     {!me && (
                       <div className='flex size-9 items-center justify-center rounded-full bg-slate-800 text-xs font-semibold text-slate-200'>
-                        {participant?.username.toString()}
+                        {chat.otherUserDisplayName[0]}
                       </div>
                     )}
                     <div
@@ -133,8 +115,8 @@ const Dashboard = () => {
                           ? 'bg-indigo-500 text-white'
                           : 'bg-slate-800 text-slate-100',
                       )}>
-                      <div className='text-xs font-semibold uppercase tracking-wide text-white/70'>
-                        {me ? 'You' : participant?.username.toString()}
+                      <div className='text-xs font-semibold tracking-wide text-white/70'>
+                        {me ? 'You' : chat.otherUserDisplayName}
                       </div>
                       <div className='mt-1'>{message.text}</div>
                       <div className='mt-2 text-[10px] text-white/70'>
