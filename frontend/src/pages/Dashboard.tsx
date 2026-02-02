@@ -15,6 +15,7 @@ import useChatLogic from '@/hooks/useChatLogic';
 import ChatHeader from '@/components/custom/dashboard/chat/chatHeader';
 import { useChatStore } from '@/store/chatStore';
 import ChatMessages from '@/components/custom/dashboard/chat/chatMessages';
+import chatHub from '@/signalr/chatHub';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -22,6 +23,14 @@ const Dashboard = () => {
   const activeChat = useChatStore((state) =>
     state.activeChatId ? state.chats[state.activeChatId] : null,
   );
+
+  useEffect(() => {
+    async function connect() {
+      await chatHub.getInstance().start();
+    }
+
+    connect();
+  }, []);
 
   const navigateToLogin = () => navigate('/login');
   useEffect(() => {
@@ -47,7 +56,7 @@ const Dashboard = () => {
         <DashboardAsideSheet />
       </div>
 
-      <main className='flex flex-1 flex-col'>
+      <main className='flex flex-1 flex-col px-15'>
         {!activeChat && (
           <div className='text-2xl font-bold m-auto'>
             Select chat on the left side to display it's messages.

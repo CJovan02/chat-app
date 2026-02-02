@@ -4,9 +4,9 @@ import { HubConnection } from '@microsoft/signalr';
 export type Callback = (data: any) => void;
 
 export class SignalRService {
-  private connection: HubConnection | null = null;
+  protected connection: HubConnection | null = null;
   // For each method name there can be multiple callbacks
-  private callbacks: Record<string, Callback[]>;
+  protected callbacks: Record<string, Callback[]> = {};
 
   constructor(private url: string) {}
 
@@ -61,7 +61,7 @@ export class SignalRService {
   }
 
   protected invoke(methodName: string, ...args: any[]) {
-    return this.connection?.invoke(methodName, args);
+    return this.connection?.invoke(methodName, JSON.stringify(args));
   }
 }
 

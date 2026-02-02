@@ -4,6 +4,7 @@ import { useEffect, useMemo } from 'react';
 import { useGetMessage } from '@/api/generated/message/message';
 import { MessageResponse, ProblemDetails } from '@/api/generated/model';
 import { mapMessageResponseToMessage } from '@/domain/models/message';
+import ChatHub from '@/signalr/chatHub';
 
 function useChatLogic() {
   const { user } = useUserStore();
@@ -17,6 +18,30 @@ function useChatLogic() {
   const activeChat = useChatStore((state) =>
     state.activeChatId ? state.chats[state.activeChatId] : null,
   );
+
+  const hub = ChatHub.getInstance();
+
+  useEffect(() => {
+    async function configure() {
+      hub.onReceiveMessage(handleReceivedMessage);
+    }
+
+    configure();
+  }, []);
+
+  const handleReceivedMessage = (data) => {
+    console.log('Received message', data);
+  };
+3
+  useEffect(() => {
+    if (!activeChatId) return;
+
+    async function join() {
+      await hub.joinRoom(activeChatId);
+    }
+
+    join();
+  }, [activeChatId]);
 
   const {
     data,
@@ -41,7 +66,9 @@ function useChatLogic() {
 
     const messageResponses = queryData as MessageResponse[];
 
-    const messages = messageResponses.map(mapMessageResponseToMessage).reverse();
+    const messages = messageResponses
+      .map(mapMessageResponseToMessage)
+      .reverse();
 
     addMessages(activeChatId, messages);
   }, [isLoaded, queryData, activeChatId]);
@@ -64,7 +91,7 @@ function useChatLogic() {
     isLoading,
     isLoaded,
     isError,
-    isChatSelected: activeChatId === null,
+    isChatSelected: !!activeChatId,
     errorMessage: isError ? getErrorMessage(error) : null,
   };
 }
