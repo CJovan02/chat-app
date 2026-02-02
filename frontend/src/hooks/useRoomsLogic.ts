@@ -77,5 +77,7 @@ export const useRoomsLogic = () => {
 
 // Util functions for chat logic. This could go into separate file
 export function getLastMessageFromChat(chat: Chat) {
-  return chat.messages[0];
+  var length = chat.messages.length;
+
+  return chat.messages[length - 1];
 }
