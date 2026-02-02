@@ -1,5 +1,5 @@
 import { Callback, SignalRService } from '@/signalr/signalRService';
-import { MessageRequest } from '@/api/generated/model';
+import { MessageRequest, MessageResponse } from '@/api/generated/model';
 
 //const apiUrl = `${import.meta.env.VITE_API_BASE_URL ?? ''}/chatHub`;
 const apiUrl = 'http://localhost:5181/chatHub';

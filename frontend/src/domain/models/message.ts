@@ -1,4 +1,8 @@
-import { ChatItemLastMessage, MessageResponse } from '@/api/generated/model';
+import {
+  ChatItemLastMessage,
+  MessageRequest,
+  MessageResponse,
+} from '@/api/generated/model';
 
 export type Message = {
   id: string;
@@ -21,4 +25,12 @@ export function mapLastMessageToMessage(mess: ChatItemLastMessage): Message {
     ...mess,
     sentAt: new Date(mess.sentAt),
   };
+}
+
+export function mapMessageDomainToRequest(mess: Message, roomId: string): MessageRequest {
+  return {
+    text: mess.text,
+    senderId: mess.senderId,
+    roomId: roomId
+  }
 }

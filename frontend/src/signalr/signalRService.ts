@@ -60,8 +60,8 @@ export class SignalRService {
     }
   }
 
-  protected invoke(methodName: string, ...args: any[]) {
-    return this.connection?.invoke(methodName, JSON.stringify(args));
+  protected invoke(methodName: string, args: any) {
+    return this.connection?.invoke(methodName, args);
   }
 }
 

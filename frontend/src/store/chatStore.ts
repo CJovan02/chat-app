@@ -45,7 +45,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         ...state.chats,
         [chatId]: {
           ...state.chats[chatId],
-          messages: [message, ...state.chats[chatId].messages],
+          messages: [...state.chats[chatId].messages, message],
         },
       },
     })),
