@@ -22,6 +22,9 @@ import { showError, showInfo } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
 import { useUserStore } from '@/store/userStore';
 import { useEffect } from 'react';
+import { Switch } from '@/components/ui/switch';
+import { Moon, Sun } from 'lucide-react';
+import { useThemeStore } from '@/store/themeStore';
 
 export const loginSchema = z.object({
   Username: z.string().min(3, 'Username must be at least 3 characters long.'),
@@ -45,6 +48,7 @@ export type LoginFormValues = z.infer<typeof loginSchema>;
 const Login = () => {
   const navigate = useNavigate();
   const { set } = useUserStore();
+  const { theme, setTheme } = useThemeStore();
   const methods = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
   });
@@ -89,13 +93,23 @@ const Login = () => {
     <div className='flex min-h-screen items-start justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-6 sm:items-center sm:px-6 sm:py-0'>
       <div className='w-full max-w-sm'>
         <Card className='border-0 shadow-2xl'>
-          <CardHeader className='gap-1'>
+          <CardHeader className='gap-1 relative'>
             <CardTitle className='text-xl font-bold sm:text-2xl'>
               Login to your account
             </CardTitle>
             <CardDescription className='text-sm sm:text-base'>
               Enter your username below to login to your account
             </CardDescription>
+            <div className='absolute top-2 right-2 flex items-center gap-1'>
+              <Sun className='h-4 w-4 text-yellow-400' />
+              <Switch
+                checked={theme === 'dark'}
+                onCheckedChange={(checked) =>
+                  setTheme(checked ? 'dark' : 'light')
+                }
+              />
+              <Moon className='h-4 w-4 text-gray-400' />
+            </div>
             <div>
               <Button
                 variant='link'
