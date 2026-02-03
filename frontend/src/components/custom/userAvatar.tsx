@@ -7,6 +7,14 @@ type Props = {
   classNameFallback?: string;
 };
 
+const AVATAR_BG_CLASSES = [
+  'bg-avatar-1',
+  'bg-avatar-2',
+  'bg-avatar-3',
+  'bg-avatar-4',
+  'bg-avatar-5',
+] as const;
+
 function UserAvatar({ name, classNameAvatar, classNameFallback }: Props) {
   const index = stringToPaletteIndex(name, 5);
 
@@ -17,7 +25,8 @@ function UserAvatar({ name, classNameAvatar, classNameFallback }: Props) {
       <AvatarFallback
         className={cn(
           'text-white',
-          `bg-avatar-${index} ${classNameFallback}`,
+          classNameFallback,
+          AVATAR_BG_CLASSES[index - 1],
         )}>
         {name.charAt(0).toUpperCase()}
       </AvatarFallback>
