@@ -118,7 +118,7 @@ export function DashboardSidebar() {
                 className='flex justify-between h-15'>
                 <div className='flex gap-2'>
                   <UserAvatar
-                    name={user.username}
+                    name={user.displayName}
                     classNameAvatar='size-10'
                     classNameFallback='text-base'
                   />
