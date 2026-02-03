@@ -90,7 +90,7 @@ const Login = () => {
   }, [isError, reset]);
 
   return (
-    <div className='flex min-h-screen items-start justify-center bg-gradient-to-br from-slate-900 to-slate-800 px-4 py-6 sm:items-center sm:px-6 sm:py-0'>
+    <div className='flex min-h-screen items-start justify-center bg-gradient-to-br from-background-tinted to-background-tinted-secondary px-4 py-6 sm:items-center sm:px-6 sm:py-0'>
       <div className='w-full max-w-sm'>
         <Card className='border-0 shadow-2xl'>
           <CardHeader className='gap-1 relative'>

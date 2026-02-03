@@ -57,7 +57,7 @@ const Dashboard = () => {
         <DashboardAsideSheet />
       </div>
 
-      <main className='flex flex-1 flex-col'>
+      <main className='flex flex-1 flex-col bg-background-tinted'>
         {!activeChat && (
           <div className='text-2xl font-bold m-auto px-15'>
             Select chat on the left side to display it's messages.

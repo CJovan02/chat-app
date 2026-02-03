@@ -17,8 +17,10 @@ function DashboardChat({ chat, isActive, onClick }: Props) {
   return (
     <Button
       onClick={onClick}
-      variant={isActive ? 'secondary' : 'ghost'}
-      className={cn('h-auto w-full justify-start gap-3 px-3 py-2')}>
+      variant='ghost'
+      className={cn(
+        `h-auto w-full justify-start gap-3 px-3 py-2 hover:bg-surface-interactive-hover ${isActive ? 'bg-surface-interactive-active' : ''}`,
+      )}>
       {/* Avatar */}
       <Avatar className='size-10 bg'>
         <AvatarFallback className='bg-primary/10 text-foreground text-md'>

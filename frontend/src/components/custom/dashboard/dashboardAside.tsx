@@ -40,7 +40,7 @@ function DashboardAside() {
         close={() => setAddRoomOpen(false)}
       />
 
-      <aside className='flex h-full w-78 flex-col border-r border-primary/20'>
+      <aside className='flex h-full w-78 flex-col border-r border-primary/20 bg-background-tinted-secondary'>
         {/* Header + Search */}
         <div className='px-4 pt-5 mb-5'>
           <div className='flex items-center gap-3 text-xl font-semibold'>

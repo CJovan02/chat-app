@@ -24,7 +24,7 @@ function ChatInput({ logic }: Props) {
             <TextInput
               id='text'
               placeholder='Hello...'
-              inputClassName='bg-ring/15 h-11'
+              inputClassName='bg-background-tinted-secondary h-11'
             />
             <Button
               type='submit'

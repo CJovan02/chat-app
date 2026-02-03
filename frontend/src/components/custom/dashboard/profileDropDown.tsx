@@ -41,6 +41,7 @@ function ProfileDropDown() {
             variant='ghost'
             size='icon-sm'
             aria-haspopup='menu'
+            className='hover:bg-surface-interactive-hover'
             //aria-expanded={menuOpen}
           >
             <ChevronDown className='size-4' />
