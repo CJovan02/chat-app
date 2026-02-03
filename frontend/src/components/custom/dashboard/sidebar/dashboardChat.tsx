@@ -1,9 +1,9 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Chat } from '@/domain/models/chat';
 import { cn } from '@/lib/utils';
 import { getLastMessageFromChat } from '@/hooks/useRoomsLogic';
 import { formatMessageTime } from '@/utils/utils';
+import UserAvatar from '@/components/custom/userAvatar';
 
 type Props = {
   chat: Chat;
@@ -17,16 +17,13 @@ function DashboardChat({ chat, isActive, onClick }: Props) {
   return (
     <Button
       onClick={onClick}
-      variant='ghost'
-      className={cn(
-        `h-auto w-full justify-start gap-3 px-3 py-2 hover:bg-surface-interactive-hover ${isActive ? 'bg-surface-interactive-active' : ''}`,
-      )}>
-      {/* Avatar */}
-      <Avatar className='size-10 bg'>
-        <AvatarFallback className='bg-primary/10 text-foreground text-md'>
-          {chat.name[0].toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
+      variant={!isActive ? 'ghost' : 'secondary'}
+      className={cn('h-auto w-full border-0 justify-start gap-3 px-3 py-2')}>
+      <UserAvatar
+        name={chat.name}
+        classNameAvatar='size-10'
+        classNameFallback='text-base'
+      />
 
       {/* Chat meta */}
       <div className='min-w-0 flex-1 text-left'>

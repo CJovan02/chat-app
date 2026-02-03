@@ -7,7 +7,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     <SidebarProvider className='w-screen h-screen' defaultOpen={true}>
       <DashboardSidebar />
       <main className='w-full h-full flex flex-col'>
-        <SidebarTrigger />
           {children}
       </main>
     </SidebarProvider>

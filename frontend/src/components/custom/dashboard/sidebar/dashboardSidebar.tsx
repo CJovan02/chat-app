@@ -19,13 +19,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
-import DashboardChat from '@/components/custom/dashboard/dashboardChat';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import ProfileDropDownContent from '@/components/custom/dashboard/profileDropDownContent';
+import ProfileDropDownContent from '@/components/custom/dashboard/sidebar/profileDropDownContent';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import DashboardChat from '@/components/custom/dashboard/sidebar/dashboardChat';
+import UserAvatar from '@/components/custom/userAvatar';
 
 export function DashboardSidebar() {
   const { user } = useUserStore();
@@ -115,13 +115,13 @@ export function DashboardSidebar() {
             <DropdownMenuTrigger asChild>
               <Button
                 variant='ghost'
-                className='flex justify-between'>
+                className='flex justify-between h-15'>
                 <div className='flex gap-2'>
-                  <Avatar className='size-10'>
-                    <AvatarFallback className='bg-primary text-primary-foreground'>
-                      {user.displayName[0].toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    name={user.username}
+                    classNameAvatar='size-10'
+                    classNameFallback='text-base'
+                  />
                   <div className='flex flex-col'>
                     <span className='text-sm font-semibold'>
                       {user.displayName}

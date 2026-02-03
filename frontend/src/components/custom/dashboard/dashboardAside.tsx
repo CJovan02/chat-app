@@ -2,13 +2,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MessageCircle, MessageCirclePlus, Search } from 'lucide-react';
-import ProfileDropDownContent from '@/components/custom/dashboard/profileDropDownContent';
+import ProfileDropDownContent from '@/components/custom/dashboard/sidebar/profileDropDownContent';
 import { useUserStore } from '@/store/userStore';
 import { useEffect, useState } from 'react';
 import { useRoomsLogic } from '@/hooks/useRoomsLogic';
 import { showError } from '@/toast';
 import { Spinner } from '@/components/ui/spinner';
-import DashboardChat from '@/components/custom/dashboard/dashboardChat';
+import DashboardChat from '@/components/custom/dashboard/sidebar/dashboardChat';
 import { Separator } from '@/components/ui/separator';
 import CreateRoomDialog from '@/components/custom/createRoom/createRoomDialog';
 

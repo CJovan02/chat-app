@@ -1,4 +1,6 @@
 import { Chat } from '@/domain/models/chat';
+import { SidebarTrigger } from '@/components/ui/sidebar';
+import UserAvatar from '@/components/custom/userAvatar';
 
 type Props = {
   activeChat: Chat;
@@ -6,8 +8,15 @@ type Props = {
 
 function ChatHeader({ activeChat }: Props) {
   return (
-    <header className='flex items-center justify-between border-b border-primary/20 px-6 py-4'>
-      <div>
+    <header className='flex items-center justify-between border-b border-primary/20 px-3 py-4'>
+      <div className='flex gap-4 items-center'>
+        <SidebarTrigger className='size-10' />
+        <UserAvatar
+          name={activeChat.name}
+          classNameAvatar='size-12'
+          classNameFallback='text-xl'
+        />
+
         <div className='text-2xl font-semibold'>
           {activeChat.otherUserDisplayName}
         </div>

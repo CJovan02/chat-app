@@ -1,23 +1,11 @@
-import { useCallback, useEffect, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
-import { Send } from 'lucide-react';
+import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useNavigate } from 'react-router-dom';
-import DashboardAside from '@/components/custom/dashboard/dashboardAside';
-import DashboardAsideSheet from '@/components/custom/dashboard/dashboardAsideSheet';
-import { useGetMessage } from '@/api/generated/message/message';
-import { showError } from '@/toast';
-import { Spinner } from '@/components/ui/spinner';
-import { useRoomsLogic } from '@/hooks/useRoomsLogic';
-import useChatLogic from '@/hooks/useChatLogic';
-import ChatHeader from '@/components/custom/dashboard/chat/chatHeader';
 import { useChatStore } from '@/store/chatStore';
-import ChatMessages from '@/components/custom/dashboard/chat/chatMessages';
 import chatHub from '@/signalr/chatHub';
 import ChatSection from '@/components/custom/dashboard/chat/chatSection';
 import DashboardLayout from '@/components/custom/dashboard/dashboardLayout';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -46,15 +34,18 @@ const Dashboard = () => {
   }
 
   return (
-      <DashboardLayout>
-          {!activeChat && (
-            <div className='text-2xl font-bold m-auto px-15'>
-              Select chat on the left side to display it's messages.
-            </div>
-          )}
+    <DashboardLayout>
+      {!activeChat && (
+        <div className='flex flex-col p-2'>
+          <SidebarTrigger className='size-10' />
+          <div className='text-2xl font-bold m-auto px-15'>
+            Select chat on the left side to display it's messages.
+          </div>
+        </div>
+      )}
 
-          {activeChat && <ChatSection />}
-      </DashboardLayout>
+      {activeChat && <ChatSection />}
+    </DashboardLayout>
   );
 };
 
