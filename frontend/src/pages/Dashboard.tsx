@@ -17,6 +17,7 @@ import { useChatStore } from '@/store/chatStore';
 import ChatMessages from '@/components/custom/dashboard/chat/chatMessages';
 import chatHub from '@/signalr/chatHub';
 import ChatSection from '@/components/custom/dashboard/chat/chatSection';
+import DashboardLayout from '@/components/custom/dashboard/dashboardLayout';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -44,29 +45,16 @@ const Dashboard = () => {
     return null;
   }
 
-  // bg-slate-950 text-slate-100
   return (
-    <div className='flex h-screen w-screen'>
-      {/* Desktop sidebar */}
-      <div className='hidden md:block h-full'>
-        <DashboardAside />
-      </div>
+      <DashboardLayout>
+          {!activeChat && (
+            <div className='text-2xl font-bold m-auto px-15'>
+              Select chat on the left side to display it's messages.
+            </div>
+          )}
 
-      {/* Mobile trigger */}
-      <div className='md:hidden'>
-        <DashboardAsideSheet />
-      </div>
-
-      <main className='flex flex-1 flex-col bg-background-tinted'>
-        {!activeChat && (
-          <div className='text-2xl font-bold m-auto px-15'>
-            Select chat on the left side to display it's messages.
-          </div>
-        )}
-
-        {activeChat && <ChatSection />}
-      </main>
-    </div>
+          {activeChat && <ChatSection />}
+      </DashboardLayout>
   );
 };
 

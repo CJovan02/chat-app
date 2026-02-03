@@ -28,7 +28,7 @@ function ChatMessages({ logic }: Props) {
   }, [isError, errorMessage]);
 
   return (
-    <div className='flex-1 overflow-y-auto px-6 py-6'>
+    <div className='flex-1 overflow-y-auto px-6 py-6 h-full'>
       {isLoading && (
         <div className='flex items-center justify-center h-full'>
           <Spinner className='size-10 text-primary' />

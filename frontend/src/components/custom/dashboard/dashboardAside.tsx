@@ -2,7 +2,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { MessageCircle, MessageCirclePlus, Search } from 'lucide-react';
-import ProfileDropDown from '@/components/custom/dashboard/profileDropDown';
+import ProfileDropDownContent from '@/components/custom/dashboard/profileDropDownContent';
 import { useUserStore } from '@/store/userStore';
 import { useEffect, useState } from 'react';
 import { useRoomsLogic } from '@/hooks/useRoomsLogic';
@@ -114,7 +114,7 @@ function DashboardAside() {
               </div>
             </div>
 
-            <ProfileDropDown />
+            <ProfileDropDownContent />
           </div>
         </div>
       </aside>
