@@ -1,3 +1,4 @@
+@import './styles/extensions.css';
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -16,7 +17,7 @@
     --secondary-foreground: oklch(0.3440 0.0605 285.3588);
     --muted: oklch(0.8824 0.0250 298.5683);
     --muted-foreground: oklch(0.5056 0.0693 289.9318);
-    --accent: oklch(0.7736 0.1430 2.0903);
+    --accent: oklch(0.9041 0.0546 358.0640);
     --accent-foreground: oklch(0.3340 0.0800 4.7188);
     --destructive: oklch(0.6512 0.2348 26.7622);
     --destructive-foreground: oklch(0.9761 0.0069 304.2433);
@@ -28,16 +29,11 @@
     --chart-3: oklch(0.7852 0.1224 167.3595);
     --chart-4: oklch(0.8719 0.1117 76.2415);
     --chart-5: oklch(0.7702 0.1164 257.8760);
-    --avatar-index-1: oklch(0.655 0.142 32);
-    --avatar-index-2: oklch(0.720 0.135 210);
-    --avatar-index-3: oklch(0.790 0.120 160);
-    --avatar-index-4: oklch(0.830 0.125 45);
-    --avatar-index-5: oklch(0.670 0.150 280);
     --sidebar: oklch(0.9513 0.0137 299.7962);
     --sidebar-foreground: oklch(0.3440 0.0605 285.3588);
     --sidebar-primary: oklch(0.5774 0.1366 297.8744);
     --sidebar-primary-foreground: oklch(0.9761 0.0069 304.2433);
-    --sidebar-accent: oklch(0.7736 0.1430 2.0903);
+    --sidebar-accent: oklch(0.9041 0.0546 358.0640);
     --sidebar-accent-foreground: oklch(0.3340 0.0800 4.7188);
     --sidebar-border: oklch(0.8604 0.0368 301.3718);
     --sidebar-ring: oklch(0.5774 0.1366 297.8744);
@@ -45,20 +41,20 @@
     --font-serif: "Lora", Georgia, serif;
     --font-mono: "Fira Code", "Courier New", monospace;
     --radius: 0.5rem;
-    --shadow-x: 1px;
+    --shadow-x: 2px;
     --shadow-y: 2px;
     --shadow-blur: 5px;
     --shadow-spread: 1px;
     --shadow-opacity: 0.06;
     --shadow-color: #1a1a1a;
-    --shadow-2xs: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
-    --shadow-xs: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
-    --shadow-sm: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-md: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 2px 4px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-lg: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 4px 6px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-xl: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 8px 10px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-2xl: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.15);
+    --shadow-2xs: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
+    --shadow-xs: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
+    --shadow-sm: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-md: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 2px 4px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-lg: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 4px 6px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-xl: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 8px 10px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-2xl: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.15);
     --tracking-normal: 0em;
     --spacing: 0.25rem;
 }
@@ -74,7 +70,7 @@
     --primary-foreground: oklch(0.2052 0.0373 289.9464);
     --secondary: oklch(0.4354 0.0863 293.7866);
     --secondary-foreground: oklch(0.8900 0.0439 292.6545);
-    --muted: oklch(0.2394 0.0579 291.8168);
+    --muted: oklch(0.2312 0.0583 291.5672);
     --muted-foreground: oklch(0.6815 0.0522 299.3858);
     --accent: oklch(0.3061 0.0578 307.0328);
     --accent-foreground: oklch(0.8280 0.1013 3.9601);
@@ -88,11 +84,6 @@
     --chart-3: oklch(0.7852 0.1224 167.3595);
     --chart-4: oklch(0.8719 0.1117 76.2415);
     --chart-5: oklch(0.7702 0.1164 257.8760);
-    --avatar-index-1: oklch(0.500 0.130 32);
-    --avatar-index-2: oklch(0.580 0.120 210);
-    --avatar-index-3: oklch(0.630 0.110 160);
-    --avatar-index-4: oklch(0.680 0.115 45);
-    --avatar-index-5: oklch(0.560 0.135 280);
     --sidebar: oklch(0.1888 0.0380 292.0265);
     --sidebar-foreground: oklch(0.8900 0.0439 292.6545);
     --sidebar-primary: oklch(0.6722 0.1394 300.3540);
@@ -105,20 +96,20 @@
     --font-serif: "Lora", Georgia, serif;
     --font-mono: "Fira Code", "Courier New", monospace;
     --radius: 0.5rem;
-    --shadow-x: 1px;
+    --shadow-x: 2px;
     --shadow-y: 2px;
     --shadow-blur: 5px;
     --shadow-spread: 1px;
     --shadow-opacity: 0.06;
     --shadow-color: #1a1a1a;
-    --shadow-2xs: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
-    --shadow-xs: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
-    --shadow-sm: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-md: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 2px 4px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-lg: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 4px 6px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-xl: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 1px 8px 10px 0px hsl(0 0% 10.1961% / 0.06);
-    --shadow-2xl: 1px 2px 5px 1px hsl(0 0% 10.1961% / 0.15);
+    --shadow-2xs: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
+    --shadow-xs: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.03);
+    --shadow-sm: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 1px 2px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-md: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 2px 4px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-lg: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 4px 6px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-xl: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.06), 2px 8px 10px 0px hsl(0 0% 10.1961% / 0.06);
+    --shadow-2xl: 2px 2px 5px 1px hsl(0 0% 10.1961% / 0.15);
 }
 
 @theme inline {
@@ -155,11 +146,6 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-    --color-avatar-1: var(--avatar-index-1);
-    --color-avatar-2: var(--avatar-index-2);
-    --color-avatar-3: var(--avatar-index-3);
-    --color-avatar-4: var(--avatar-index-4);
-    --color-avatar-5: var(--avatar-index-5);
     --font-sans: var(--font-sans);
     --font-mono: var(--font-mono);
     --font-serif: var(--font-serif);
