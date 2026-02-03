@@ -13,11 +13,11 @@ function ChatHeader({ activeChat }: Props) {
         <SidebarTrigger className='size-10' />
         <UserAvatar
           name={activeChat.name}
-          classNameAvatar='size-12'
+          classNameAvatar='size-11'
           classNameFallback='text-xl'
         />
 
-        <div className='text-2xl font-semibold'>
+        <div className='text-xl font-semibold'>
           {activeChat.otherUserDisplayName}
         </div>
       </div>
