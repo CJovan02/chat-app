@@ -1,6 +1,6 @@
 import { useUserStore } from '@/store/userStore';
 import { useChatStore } from '@/store/chatStore';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useGetMessage } from '@/api/generated/message/message';
 import {
   MessageRequest,
@@ -8,11 +8,7 @@ import {
   ProblemDetails,
   UserResponse,
 } from '@/api/generated/model';
-import {
-  mapMessageDomainToRequest,
-  mapMessageResponseToMessage,
-  Message,
-} from '@/domain/models/message';
+import { mapMessageResponseToMessage, Message } from '@/domain/models/message';
 import ChatHub from '@/signalr/chatHub';
 import { Chat } from '@/domain/models/chat';
 import { useForm, UseFormReturn } from 'react-hook-form';

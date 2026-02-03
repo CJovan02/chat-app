@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import DashboardChat from '@/components/custom/dashboard/sidebar/dashboardChat';
 import UserAvatar from '@/components/custom/userAvatar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export function DashboardSidebar() {
   const { user } = useUserStore();
@@ -56,7 +57,7 @@ export function DashboardSidebar() {
       />
 
       <Sidebar side='left'>
-        <SidebarHeader className='px-4'>
+        <SidebarHeader className='px-4 pb-6 border-b-1'>
           <div className='flex items-center gap-3 text-xl font-semibold'>
             <MessageCircle className='size-5 text-primary/40' />
             Recent Chats
@@ -78,36 +79,38 @@ export function DashboardSidebar() {
           </div>
         </SidebarHeader>
         <SidebarContent>
-          {isError && (
-            <SidebarGroup className='flex items-center flex-col justify-center'>
-              <p>Error trying to load chats, please try again.</p>
-              <Button
-                className='my-7 w-full font-bold text-md h-10'
-                variant='default'
-                onClick={() => refetch()}>
-                Try Again
-              </Button>
-            </SidebarGroup>
-          )}
+          <ScrollArea className='overflow-y-auto'>
+            {isError && (
+              <SidebarGroup className='flex items-center flex-col justify-center'>
+                <p>Error trying to load chats, please try again.</p>
+                <Button
+                  className='my-7 w-full font-bold text-md h-10'
+                  variant='default'
+                  onClick={() => refetch()}>
+                  Try Again
+                </Button>
+              </SidebarGroup>
+            )}
 
-          {isLoading && (
-            <SidebarGroup className='flex-1 items-center justify-center h-full'>
-              <Spinner className='size-10 text-primary' />
-            </SidebarGroup>
-          )}
+            {isLoading && (
+              <SidebarGroup className='flex-1 items-center justify-center h-full'>
+                <Spinner className='size-10 text-primary' />
+              </SidebarGroup>
+            )}
 
-          {isLoaded && (
-            <SidebarGroup className='mt-5 flex-1 space-y-2'>
-              {Object.values(chats).map((chat) => (
-                <DashboardChat
-                  key={chat.id}
-                  chat={chat}
-                  isActive={isChatActive(chat.id)}
-                  onClick={() => setActiveChat(chat.id)}
-                />
-              ))}
-            </SidebarGroup>
-          )}
+            {isLoaded && (
+              <SidebarGroup className='mt-5 flex-1 space-y-2'>
+                {Object.values(chats).map((chat) => (
+                  <DashboardChat
+                    key={chat.id}
+                    chat={chat}
+                    isActive={isChatActive(chat.id)}
+                    onClick={() => setActiveChat(chat.id)}
+                  />
+                ))}
+              </SidebarGroup>
+            )}
+          </ScrollArea>
         </SidebarContent>
 
         <SidebarFooter className='border-t border-primary/20 px-4 py-4'>

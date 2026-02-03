@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Chat } from '@/domain/models/chat';
 import { Message } from '@/domain/models/message';
-import UserAvatar from '@/components/custom/userAvatar';
 
 type Props = {
   isMe: boolean;
@@ -33,8 +32,8 @@ function MessageBubble({ isMe, message, activeChat }: Props) {
         <span>{message.text}</span>
         <span
           className={cn(
-            'text-[10px] text-center leading-0',
-            isMe ? 'text-primary-foreground' : 'text-white/70',
+            'text-[10px] text-center leading-none',
+            isMe ? 'text-primary-foreground' : 'text-foreground/80',
           )}>
           {localTime}
         </span>

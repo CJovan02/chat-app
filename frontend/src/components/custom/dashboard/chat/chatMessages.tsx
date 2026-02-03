@@ -1,15 +1,16 @@
-import { cn } from '@/lib/utils';
-import useChatLogic, { UseChatLogicReturn } from '@/hooks/useChatLogic';
+import { UseChatLogicReturn } from '@/hooks/useChatLogic';
 import { Spinner } from '@/components/ui/spinner';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { showError } from '@/toast';
 import MessageBubble from '@/components/custom/dashboard/chat/messageBubble';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type Props = {
   logic: UseChatLogicReturn;
 };
 
 function ChatMessages({ logic }: Props) {
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const {
     messages,
     isMe,
@@ -28,8 +29,14 @@ function ChatMessages({ logic }: Props) {
     if (isError) showError(errorMessage);
   }, [isError, errorMessage]);
 
+  useEffect(() => {
+    if (messages.length === 0) return;
+
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
-    <div className='flex-1 overflow-y-auto px-6 py-6 h-full'>
+    <ScrollArea className='flex-1 overflow-y-auto px-6 py-6 h-full'>
       {isLoading && (
         <div className='flex items-center justify-center h-full'>
           <Spinner className='size-10 text-primary' />
@@ -56,7 +63,9 @@ function ChatMessages({ logic }: Props) {
           })}
         </div>
       )}
-    </div>
+
+      <div ref={bottomRef} />
+    </ScrollArea>
   );
 }
 
