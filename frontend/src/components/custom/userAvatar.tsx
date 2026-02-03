@@ -17,6 +17,7 @@ const AVATAR_BG_CLASSES = [
 
 function UserAvatar({ name, classNameAvatar, classNameFallback }: Props) {
   const index = stringToPaletteIndex(name, 5);
+  console.log(index);
 
   return (
     <Avatar
@@ -26,7 +27,7 @@ function UserAvatar({ name, classNameAvatar, classNameFallback }: Props) {
         className={cn(
           'text-white',
           classNameFallback,
-          AVATAR_BG_CLASSES[index - 1],
+          AVATAR_BG_CLASSES[index],
         )}>
         {name.charAt(0).toUpperCase()}
       </AvatarFallback>
