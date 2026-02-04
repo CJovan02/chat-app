@@ -6,14 +6,10 @@ services:
     ports:
       - ${REDIS_PORT}:6379
       - ${REDIS_INSIGHT_PORT}:8001
-    command: >
-      redis-stack-server
-      --save 20 1
-      --appendonly yes
-      --loglevel warning
-      --requirepass ${REDIS_PASSWORD}
     volumes:
       - dbvolume:/data
+    environment:
+      REDIS_ARGS: --save 20 1 --requirepass ${REDIS_PASSWORD}
 
   backend:
     build: ../backend/
