@@ -1,8 +1,13 @@
-# Chat Application
-Chat Application Built for Advanced Database Systems subject
+# Chat Application - Overview
+Chat Application Built for *Advanced Database Systems* subject.
+
+The goal of this project was developing a system that would leverage `Redis` database.
+We opted for using it as the primary database for the core feature that Redis excels at: **storing and accessing messages**.
+
+---
 
 # Table of Contents
-- [Chat Application](#chat-application)
+- [Chat Application - Overview](#chat-application---overview)
 - [Table of Contents](#table-of-contents)
 - [Database Diagram](#database-diagram)
 - [How to Run](#how-to-run)
@@ -17,7 +22,11 @@ Chat Application Built for Advanced Database Systems subject
     - [6. Docker cleanup](#6-docker-cleanup)
   - [Runing the server without Docker](#runing-the-server-without-docker)
     - [Create `.env` from `.env.example`](#create-env-from-envexample)
+- [Application Structure](#application-structure)
+  - [Server](#server)
+  - [Client](#client)
 
+---
 
 # Database Diagram
 
@@ -165,5 +174,23 @@ cp .env.example .env
 > [!WARNING]
 > There is a chance that client won't be able to reach the server if you run it locally. That means that the server port has changed and you need to put the exact server port number inside `./docker/.env` file for the `VITE_BACKEND_PORT` variable.
 
+---
 
+# Application Structure
 
+## Server
+
+Server was built using `.NET 9` as a **REST API** server as well as **SignalR**.
+- REST was used for creating a new account, fetching user data, room data and creating new rooms
+- SignalR was used for sending and receiving messages in real time
+
+## Client
+Client was built using `Electron` with `React` and `Vite`.
+It contains 3 pages:
+- Login
+- Register
+- Dashboard
+
+It also has pop-up forms for editing profile and creating a new room.
+
+Dashboard is the main part: lists all rooms, displays your profile information, allows you to open a chat and send messages to it.
