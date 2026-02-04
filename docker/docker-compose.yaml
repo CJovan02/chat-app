@@ -5,13 +5,13 @@ services:
     restart: always
     ports:
       - ${REDIS_PORT}:6379
+      - ${REDIS_INSIGHT_PORT}:8001
     command: >
-      redis-server
+      redis-stack-server
       --save 20 1
+      --appendonly yes
       --loglevel warning
       --requirepass ${REDIS_PASSWORD}
-      --loadmodule /opt/redis-stack/lib/redisearch.so
-      --loadmodule /opt/redis-stack/lib/rejson.so
     volumes:
       - dbvolume:/data
 
@@ -24,9 +24,9 @@ services:
       REDIS_HOST: db
       REDIS_PORT: ${REDIS_PORT}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
-      FRONTEND_ADDRESS: http://localhost:${FRONTEND_PORT}
+      FRONTEND_ADDRESS: http://localhost:${VITE_FRONTEND_PORT}
     ports:
-      - ${BACKEND_PORT}:8080
+      - ${VITE_BACKEND_PORT}:8080
 
 volumes:
   dbvolume:

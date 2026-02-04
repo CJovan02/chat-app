@@ -23,5 +23,8 @@
     "./forge.config.ts",
     "*.mts",
     "vite.renderer.config.mts"
-  ]
+  ],
+  "compilerOptions": {
+    "types": ["vite/client"]
+  }
 }

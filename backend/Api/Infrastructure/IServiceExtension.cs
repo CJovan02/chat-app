@@ -61,6 +61,7 @@ public static class IServiceExtension
     {
         // "http://localhost:5174"
         // "http://localhost:5173"
+        Console.WriteLine(frontendOrigin);
         return services
             .AddCors(options =>
             {

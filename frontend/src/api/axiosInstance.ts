@@ -1,9 +1,8 @@
 import { ERRORS } from '@/common/constants';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
-// change to use only env
-//const API_BASE_URL = process.env.VITE_API_BASE_URL || 'http://localhost:5181';
-const API_BASE_URL = 'http://localhost:5181';
+const BACKEND_PORT = import.meta.env.VITE_BACKEND_PORT ?? '5181'
+const API_BASE_URL = `http://localhost:${BACKEND_PORT}`;
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
