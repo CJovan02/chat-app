@@ -15,9 +15,14 @@ namespace backend.Infrastructure;
 
 public static class IServiceExtension
 {
-    public static IServiceCollection AddEnvVariables(this IServiceCollection services)
+    public static IServiceCollection AddEnvVariables(this IServiceCollection services, EnvConfig? instance = null)
     {
-        return services.AddSingleton<IEnvConfig, EnvConfig>();
+        if (instance == null)
+            services.AddSingleton<IEnvConfig, EnvConfig>();
+        else
+            services.AddSingleton<IEnvConfig>(instance);
+
+        return services;
     }
 
     public static IServiceCollection AddRepositories(this IServiceCollection services)
@@ -50,5 +55,23 @@ public static class IServiceExtension
             .AddValidatorsFromAssembly(typeof(IdRequest).Assembly, includeInternalTypes: true)
             .AddValidatorsFromAssemblyContaining<Program>()
             .AddFluentValidationAutoValidation();
+    }
+
+    public static IServiceCollection AddFrontendToCors(this IServiceCollection services, string frontendOrigin)
+    {
+        // "http://localhost:5174"
+        // "http://localhost:5173"
+        return services
+            .AddCors(options =>
+            {
+                options.AddPolicy(name: Common.Constants.OriginNames.Frontend,
+                    policy =>
+                    {
+                        policy
+                            .WithOrigins(frontendOrigin)
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
+                    });
+            });
     }
 }

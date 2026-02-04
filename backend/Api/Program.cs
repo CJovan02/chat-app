@@ -1,33 +1,23 @@
+using backend.Common;
 using backend.Database;
 using backend.Hubs;
 using backend.Infrastructure;
+using backend.Infrastructure.EnvironmentConfig;
 using backend.Infrastructure.HostedServices;
-using FluentValidation;
 using Microsoft.OpenApi.Models;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
-const string frontendOrigin = "_frontendOrigin";
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: frontendOrigin,
-        policy =>
-        {
-            policy
-                .WithOrigins("http://localhost:5174", "http://localhost:5173")
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-        });
-});
-
+// Not the best solution, but it works :)
 DotNetEnv.Env.Load();
+var envConfig = new EnvConfig();
+builder.Services.AddEnvVariables(envConfig);
+builder.Services.AddFrontendToCors(envConfig.FrontendAddress);
 
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Chat-App Backend API", Version = "v1" });
 });
-builder.Services.AddEnvVariables();
 builder.Services.AddExceptionHandlers();
 builder.Services.AddFluentValidationAndValidators();
 
@@ -50,14 +40,14 @@ var redis = app.Services.GetService<RedisContext>();
 await redis.PingAsync();
 
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.MapControllers();
-}
+// if (app.Environment.IsDevelopment())
+// {
+app.UseSwagger();
+app.UseSwaggerUI();
+// }
 
-app.UseCors(frontendOrigin);
+app.MapControllers();
+app.UseCors(Constants.OriginNames.Frontend);
 
 app.UseHttpsRedirection();
 app.MapHub<ChatHub>("/chatHub");

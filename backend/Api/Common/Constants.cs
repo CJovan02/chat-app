@@ -4,9 +4,14 @@ public static class Constants
 {
     public static class EnvVariables
     {
-        public static string RedisCloudHost = "REDIS_CLOUD_HOST";
-        public static string RedisCloudPort = "REDIS_CLOUD_PORT";
-        public static string RedisPassword = "REDIS_PASSWORD";
+        public const string RedisHost = "REDIS_HOST";
+        public const string RedisPort = "REDIS_PORT";
+        public const string RedisPassword = "REDIS_PASSWORD";
+        public const string FrontendAddress = "FRONTEND_ADDRESS";
     }
 
+    public static class OriginNames
+    {
+        public const string Frontend = "_frontendOrigin";
+    }
 }
