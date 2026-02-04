@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["vite/client"],
     "target": "ESNext",
     "module": "esnext",
     "allowJs": true,
@@ -23,8 +24,5 @@
     "./forge.config.ts",
     "*.mts",
     "vite.renderer.config.mts"
-  ],
-  "compilerOptions": {
-    "types": ["vite/client"]
-  }
+  ]
 }

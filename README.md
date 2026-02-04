@@ -162,5 +162,8 @@ cd chat-app/backend/Api
 cp .env.example .env
 ```
 
+> [!WARNING]
+> There is a chance that client won't be able to reach the server if you run it locally. That means that the server port has changed and you need to put the exact server port number inside `./docker/.env` file for the `VITE_BACKEND_PORT` variable.
+
 
 
