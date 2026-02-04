@@ -1,8 +1,8 @@
 import { Callback, SignalRService } from '@/signalr/signalRService';
 import { MessageRequest, MessageResponse } from '@/api/generated/model';
+import { API_BASE_URL } from '@/api/axiosInstance';
 
-//const apiUrl = `${import.meta.env.VITE_API_BASE_URL ?? ''}/chatHub`;
-const apiUrl = 'http://localhost:5181/chatHub';
+const apiUrl = API_BASE_URL + '/chatHub';
 
 // Singleton
 class ChatHub extends SignalRService {

@@ -2,7 +2,7 @@ import { ERRORS } from '@/common/constants';
 import axios from 'axios';
 
 const BACKEND_PORT = import.meta.env.VITE_BACKEND_PORT ?? '5181'
-const API_BASE_URL = `http://localhost:${BACKEND_PORT}`;
+export const API_BASE_URL = `http://localhost:${BACKEND_PORT}`;
 
 const instance = axios.create({
   baseURL: API_BASE_URL,
